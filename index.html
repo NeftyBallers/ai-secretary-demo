@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Secretary - Test Version</title>
+    <title>AI Secretary - Automate Your Business Administration</title>
     <style>
         * {
             margin: 0;
@@ -34,6 +34,11 @@
             font-size: 3rem;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
 
         .main-dashboard {
@@ -84,48 +89,270 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .test-message {
-            background: #e8f5e8;
-            color: #2e7d32;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        /* Analytics Styles */
+        .analytics-section {
+            background: rgba(102,126,234,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .calculator-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .input-section h3,
+        .results-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .input-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .input-group label {
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        .cost-result {
+            background: white;
             padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-            border-left: 4px solid #4CAF50;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e0e7ff;
+        }
+
+        .cost-result h4 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .cost-amount {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .cost-description {
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .human-cost { border-left: 4px solid #ff6b6b; }
+        .ai-cost { border-left: 4px solid #4CAF50; }
+        .savings-highlight {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .savings-highlight h4,
+        .savings-highlight .cost-amount {
+            color: white;
+        }
+
+        .savings-highlight .cost-description {
+            color: rgba(255,255,255,0.9);
+        }
+
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 AI Secretary - Test Version</h1>
-            <p>Testing basic tab functionality</p>
+            <h1>🤖 AI Secretary</h1>
+            <p>Automate your business administration and eliminate routine tasks</p>
         </div>
 
         <div class="main-dashboard">
             <div class="nav-tabs">
                 <button class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</button>
                 <button class="nav-tab" onclick="switchTab('integrations')">Integrations</button>
+                <button class="nav-tab" onclick="switchTab('automations')">Automations</button>
+                <button class="nav-tab" onclick="switchTab('tasks')">Tasks</button>
+                <button class="nav-tab" onclick="switchTab('chat')">AI Assistant</button>
                 <button class="nav-tab" onclick="switchTab('analytics')">Analytics</button>
             </div>
 
+            <!-- Dashboard Tab -->
             <div class="tab-content active" id="dashboard">
-                <div class="test-message">
-                    <h3>✅ Dashboard Tab Working</h3>
-                    <p>If you can see this and click between tabs, the basic functionality is working!</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">Tasks Automated Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8.2h</div>
+                        <div class="stat-label">Time Saved This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">94%</div>
+                        <div class="stat-label">Admin Tasks Automated</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Active Integrations</div>
+                    </div>
                 </div>
+                <h3 style="margin-bottom: 20px; color: #333;">Recent Activity</h3>
+                <p style="color: #666; padding: 20px; background: #f8f9ff; border-radius: 10px;">Dashboard content - all your recent AI automation activity will appear here.</p>
             </div>
 
+            <!-- Integrations Tab -->
             <div class="tab-content" id="integrations">
-                <div class="test-message">
-                    <h3>✅ Integrations Tab Working</h3>
-                    <p>Great! The tab switching is functioning properly.</p>
-                </div>
+                <h3 style="margin-bottom: 20px; color: #333;">Connect Your Business Tools</h3>
+                <p style="color: #666; padding: 20px; background: #f8f9ff; border-radius: 10px;">Integration settings and connected services will appear here.</p>
             </div>
 
+            <!-- Automations Tab -->
+            <div class="tab-content" id="automations">
+                <h3 style="margin-bottom: 20px; color: #333;">AI Automation Rules</h3>
+                <p style="color: #666; padding: 20px; background: #f8f9ff; border-radius: 10px;">Your automation rules and workflows will be configured here.</p>
+            </div>
+
+            <!-- Tasks Tab -->
+            <div class="tab-content" id="tasks">
+                <h3 style="margin-bottom: 20px; color: #333;">Today's AI-Generated Tasks</h3>
+                <p style="color: #666; padding: 20px; background: #f8f9ff; border-radius: 10px;">AI-generated tasks and priorities will be listed here.</p>
+            </div>
+
+            <!-- Chat Tab -->
+            <div class="tab-content" id="chat">
+                <h3 style="margin-bottom: 20px; color: #333;">AI Assistant Chat</h3>
+                <p style="color: #666; padding: 20px; background: #f8f9ff; border-radius: 10px;">Interactive AI chat interface will be available here.</p>
+            </div>
+
+            <!-- Analytics Tab -->
             <div class="tab-content" id="analytics">
-                <div class="test-message">
-                    <h3>✅ Analytics Tab Working</h3>
-                    <p>Perfect! Now we know the tabs work. We can add the analytics features back.</p>
+                <div class="analytics-section">
+                    <div class="section-header">💼 Human Secretary vs AI Cost Calculator</div>
+                    <div class="calculator-grid">
+                        
+                        <!-- Input Section -->
+                        <div class="input-section">
+                            <h3>📝 Enter Your Secretary Costs</h3>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label>Annual Salary ($)</label>
+                                    <input type="number" id="salary" value="55000" onchange="calculateCosts()">
+                                </div>
+                                <div class="input-group">
+                                    <label>Health Insurance ($)</label>
+                                    <input type="number" id="insurance" value="8500" onchange="calculateCosts()">
+                                </div>
+                                <div class="input-group">
+                                    <label>Superannuation (%)</label>
+                                    <input type="number" id="super" value="11" step="0.1" onchange="calculateCosts()">
+                                </div>
+                                <div class="input-group">
+                                    <label>Annual Leave Days</label>
+                                    <input type="number" id="annual-leave" value="20" onchange="calculateCosts()">
+                                </div>
+                                <div class="input-group">
+                                    <label>Average Sick Days</label>
+                                    <input type="number" id="sick-leave" value="8" onchange="calculateCosts()">
+                                </div>
+                                <div class="input-group">
+                                    <label>Other Benefits ($)</label>
+                                    <input type="number" id="benefits" value="3200" placeholder="Training, equipment, etc." onchange="calculateCosts()">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results Section -->
+                        <div class="results-section">
+                            <h3>💰 Cost Comparison Results</h3>
+                            
+                            <div class="cost-result human-cost">
+                                <h4>👤 Human Secretary Total Cost</h4>
+                                <div class="cost-amount" id="human-total">$73,250</div>
+                                <div class="cost-description" id="human-breakdown">Available 89.2% of year (232 working days)</div>
+                            </div>
+                            
+                            <div class="cost-result ai-cost">
+                                <h4>🤖 AI Secretary Annual Cost</h4>
+                                <div class="cost-amount" id="ai-total">$3,588</div>
+                                <div class="cost-description">Business Plan × 12 months</div>
+                            </div>
+                            
+                            <div class="cost-result savings-highlight">
+                                <h4>💎 Your Annual Savings</h4>
+                                <div class="cost-amount" id="savings-total">$69,662</div>
+                                <div class="cost-description" id="savings-percentage">95.1% cost reduction</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,6 +373,44 @@
             
             // Add active class to clicked tab
             event.target.classList.add('active');
+            
+            // Initialize analytics if analytics tab is opened
+            if (tabName === 'analytics') {
+                setTimeout(calculateCosts, 100);
+            }
+        }
+
+        function calculateCosts() {
+            const salary = parseFloat(document.getElementById('salary').value) || 0;
+            const insurance = parseFloat(document.getElementById('insurance').value) || 0;
+            const superRate = parseFloat(document.getElementById('super').value) || 0;
+            const annualLeave = parseInt(document.getElementById('annual-leave').value) || 0;
+            const sickLeave = parseInt(document.getElementById('sick-leave').value) || 0;
+            const benefits = parseFloat(document.getElementById('benefits').value) || 0;
+
+            const superAmount = salary * (superRate / 100);
+            const totalWorkDays = 260;
+            const daysOff = annualLeave + sickLeave;
+            const workingDays = Math.max(totalWorkDays - daysOff, 1);
+            const availabilityPercentage = (workingDays / totalWorkDays) * 100;
+
+            const humanTotal = salary + insurance + superAmount + benefits;
+            const aiTotal = 299 * 12;
+            const savings = Math.max(humanTotal - aiTotal, 0);
+            const savingsPercentage = humanTotal > 0 ? (savings / humanTotal) * 100 : 0;
+
+            updateElement('human-total', '$' + humanTotal.toLocaleString());
+            updateElement('human-breakdown', 'Available ' + availabilityPercentage.toFixed(1) + '% of year (' + workingDays + ' working days)');
+            updateElement('ai-total', '$' + aiTotal.toLocaleString());
+            updateElement('savings-total', '$' + savings.toLocaleString());
+            updateElement('savings-percentage', savingsPercentage.toFixed(1) + '% cost reduction');
+        }
+
+        function updateElement(id, value) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value;
+            }
         }
     </script>
 </body>
