@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Secretary - Automate Your Business Administration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-dashboard {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .nav-tab {
+            padding: 15px 30px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px 10px 0 0;
+            margin: 0 5px;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, #f8f9ff, #e8f0ff);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #e0e7ff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.15);
+        }
+
+        .service-card.connected {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            border-color: #28a745;
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .gmail-icon { background: #ea4335; }
+        .calendar-icon { background: #4285f4; }
+        .slack-icon { background: #4a154b; }
+        .zoom-icon { background: #2d8cff; }
+        .salesforce-icon { background: #00a1e0; }
+        .hubspot-icon { background: #ff7a59; }
+
+        .service-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .service-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .connect-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+        .connect-btn.connected {
+            background: #28a745;
+        }
+
+        .automation-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e7ff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .automation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .automation-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .automation-toggle {
+            width: 60px;
+            height: 30px;
+            background: #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .automation-toggle.active {
+            background: #667eea;
+        }
+
+        .automation-toggle::after {
+            content: '';
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .automation-toggle.active::after {
+            left: 32px;
+        }
+
+        .task-item {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .task-priority {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .priority-high { background: #ffe6e6; color: #d32f2f; }
+        .priority-medium { background: #fff3e0; color: #f57c00; }
+        .priority-low { background: #e8f5e8; color: #388e3c; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .chat-interface {
+            background: white;
+            border-radius: 15px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #e0e7ff;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px 15px 0 0;
+            font-weight: 600;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .message.user {
+            background: #667eea;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant {
+            background: #f1f3f4;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-container {
+            padding: 15px 20px;
+            border-top: 1px solid #e0e7ff;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .chat-send {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .floating-help {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(102,126,234,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .floating-help:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                overflow-x: auto;
+                justify-content: flex-start;
+            }
+            
+            .nav-tab {
+                white-space: nowrap;
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 AI Secretary</h1>
+            <p>Automate your business administration and eliminate routine tasks</p>
+        </div>
+
+        <div class="main-dashboard">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</button>
+                <button class="nav-tab" onclick="switchTab('integrations')">Integrations</button>
+                <button class="nav-tab" onclick="switchTab('automations')">Automations</button>
+                <button class="nav-tab" onclick="switchTab('tasks')">Tasks</button>
+                <button class="nav-tab" onclick="switchTab('chat')">AI Assistant</button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">47</div>
+                        <div class="stat-label">Tasks Automated Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">8.2h</div>
+                        <div class="stat-label">Time Saved This Week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">94%</div>
+                        <div class="stat-label">Admin Tasks Automated</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Active Integrations</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-bottom: 20px; color: #333;">Recent Activity</h3>
+                <div class="automation-card">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <div style="width: 8px; height: 8px; background: #28a745; border-radius: 50%;"></div>
+                        <strong>Meeting scheduled</strong>
+                        <span style="color: #666; margin-left: auto;">2 minutes ago</span>
+                    </div>
+                    <p style="color: #666; margin-left: 18px;">Automatically scheduled follow-up meeting with John Smith based on email thread</p>
+                </div>
+                
+                <div class="automation-card">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <div style="width: 8px; height: 8px; background: #667eea; border-radius: 50%;"></div>
+                        <strong>Email categorized</strong>
+                        <span style="color: #666; margin-left: auto;">5 minutes ago</span>
+                    </div>
+                    <p style="color: #666; margin-left: 18px;">Sorted 8 emails into appropriate folders and flagged 2 for priority response</p>
+                </div>
+
+                <div class="automation-card">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <div style="width: 8px; height: 8px; background: #f57c00; border-radius: 50%;"></div>
+                        <strong>Invoice processed</strong>
+                        <span style="color: #666; margin-left: auto;">12 minutes ago</span>
+                    </div>
+                    <p style="color: #666; margin-left: 18px;">Extracted data from vendor invoice and added to expense tracking system</p>
+                </div>
+            </div>
+
+            <!-- Integrations Tab -->
+            <div class="tab-content" id="integrations">
+                <h3 style="margin-bottom: 20px; color: #333;">Connect Your Business Tools</h3>
+                <div class="service-grid">
+                    <div class="service-card connected">
+                        <div class="service-header">
+                            <div class="service-icon gmail-icon">📧</div>
+                            <div class="service-title">Gmail</div>
+                        </div>
+                        <div class="service-description">
+                            Auto-sort emails, draft responses, schedule follow-ups, and extract important information.
+                        </div>
+                        <button class="connect-btn connected" onclick="toggleConnection(this)">✓ Connected</button>
+                    </div>
+
+                    <div class="service-card connected">
+                        <div class="service-header">
+                            <div class="service-icon calendar-icon">📅</div>
+                            <div class="service-title">Google Calendar</div>
+                        </div>
+                        <div class="service-description">
+                            Smart scheduling, conflict resolution, meeting preparation, and automatic agenda creation.
+                        </div>
+                        <button class="connect-btn connected" onclick="toggleConnection(this)">✓ Connected</button>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon slack-icon">💬</div>
+                            <div class="service-title">Slack</div>
+                        </div>
+                        <div class="service-description">
+                            Monitor channels, summarize discussions, create action items, and route messages appropriately.
+                        </div>
+                        <button class="connect-btn" onclick="toggleConnection(this)">Connect</button>
+                    </div>
+
+                    <div class="service-card connected">
+                        <div class="service-header">
+                            <div class="service-icon zoom-icon">🎥</div>
+                            <div class="service-title">Zoom</div>
+                        </div>
+                        <div class="service-description">
+                            Schedule meetings, generate transcripts, create summaries, and track action items.
+                        </div>
+                        <button class="connect-btn connected" onclick="toggleConnection(this)">✓ Connected</button>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon salesforce-icon">💼</div>
+                            <div class="service-title">Salesforce</div>
+                        </div>
+                        <div class="service-description">
+                            Update leads, log activities, generate reports, and maintain customer data integrity.
+                        </div>
+                        <button class="connect-btn" onclick="toggleConnection(this)">Connect</button>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon hubspot-icon">🚀</div>
+                            <div class="service-title">HubSpot</div>
+                        </div>
+                        <div class="service-description">
+                            Manage contacts, track deals, automate workflows, and generate marketing insights.
+                        </div>
+                        <button class="connect-btn" onclick="toggleConnection(this)">Connect</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Automations Tab -->
+            <div class="tab-content" id="automations">
+                <h3 style="margin-bottom: 20px; color: #333;">AI Automation Rules</h3>
+                
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-title">📧 Smart Email Management</div>
+                        <div class="automation-toggle active" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <p style="color: #666; margin-bottom: 15px;">Automatically categorize, prioritize, and draft responses to incoming emails based on content and sender.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Auto-categorize</span>
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Priority flagging</span>
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Draft responses</span>
+                    </div>
+                </div>
+
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-title">📅 Meeting Coordination</div>
+                        <div class="automation-toggle active" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <p style="color: #666; margin-bottom: 15px;">Schedule meetings, find optimal times, send invitations, and prepare agendas automatically.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Smart scheduling</span>
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Auto-agenda</span>
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Conflict resolution</span>
+                    </div>
+                </div>
+
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-title">📊 Data Entry & Processing</div>
+                        <div class="automation-toggle active" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <p style="color: #666; margin-bottom: 15px;">Extract data from documents, invoices, and forms. Auto-populate CRM and accounting systems.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Document parsing</span>
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">CRM updates</span>
+                        <span style="background: #e8f5e8; color: #2e7d32; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Invoice processing</span>
+                    </div>
+                </div>
+
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-title">🤖 Customer Support Triage</div>
+                        <div class="automation-toggle" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <p style="color: #666; margin-bottom: 15px;">Analyze support requests, categorize by urgency, route to appropriate team members, and draft initial responses.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="background: #fff3e0; color: #f57c00; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Auto-routing</span>
+                        <span style="background: #fff3e0; color: #f57c00; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Urgency analysis</span>
+                        <span style="background: #fff3e0; color: #f57c00; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Response drafting</span>
+                    </div>
+                </div>
+
+                <div class="automation-card">
+                    <div class="automation-header">
+                        <div class="automation-title">📈 Report Generation</div>
+                        <div class="automation-toggle" onclick="toggleAutomation(this)"></div>
+                    </div>
+                    <p style="color: #666; margin-bottom: 15px;">Generate weekly/monthly reports from your business data, create visualizations, and distribute to stakeholders.</p>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <span style="background: #fff3e0; color: #f57c00; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Auto-reports</span>
+                        <span style="background: #fff3e0; color: #f57c00; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Data visualization</span>
+                        <span style="background: #fff3e0; color: #f57c00; padding: 4px 12px; border-radius: 15px; font-size: 0.8rem;">Scheduled delivery</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Tab -->
+            <div class="tab-content" id="tasks">
+                <h3 style="margin-bottom: 20px; color: #333;">Today's AI-Generated Tasks</h3>
+                
+                <div class="task-item">
+                    <div class="task-priority priority-high">High Priority</div>
+                    <h4 style="margin-bottom: 8px;">Review and respond to Sarah Johnson's contract proposal</h4>
+                    <p style="color: #666; margin-bottom: 10px;">Email received 2 hours ago. Contains contract terms for Q4 project. Deadline: End of day.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Open Email</button>
+                        <button style="background: #f8f9ff; color: #667eea; border: 1px solid #667eea; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Mark Complete</button>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-priority priority-high">High Priority</div>
+                    <h4 style="margin-bottom: 8px;">Schedule follow-up meeting with development team</h4>
+                    <p style="color: #666; margin-bottom: 10px;">Based on yesterday's project discussion. Suggested times: Tomorrow 2-4 PM or Thursday 10-12 PM.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Auto-Schedule</button>
+                        <button style="background: #f8f9ff; color: #667eea; border: 1px solid #667eea; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Review Options</button>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-priority priority-medium">Medium Priority</div>
+                    <h4 style="margin-bottom: 8px;">Process 3 vendor invoices for approval</h4>
+                    <p style="color: #666; margin-bottom: 10px;">New invoices from TechCorp ($2,400), Office Supplies Plus ($340), and CloudHost ($890).</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Process All</button>
+                        <button style="background: #f8f9ff; color: #667eea; border: 1px solid #667eea; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Review Details</button>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-priority priority-medium">Medium Priority</div>
+                    <h4 style="margin-bottom: 8px;">Update CRM with 5 new lead contacts</h4>
+                    <p style="color: #666; margin-bottom: 10px;">Leads collected from yesterday's webinar. All contact information verified and ready for import.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Import Leads</button>
+                        <button style="background: #f8f9ff; color: #667eea; border: 1px solid #667eea; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Preview Data</button>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-priority priority-low">Low Priority</div>
+                    <h4 style="margin-bottom: 8px;">Organize shared drive folders</h4>
+                    <p style="color: #666; margin-bottom: 10px;">Detected 47 unsorted files in main directory. Suggested organization by project and date.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Auto-Organize</button>
+                        <button style="background: #f8f9ff; color: #667eea; border: 1px solid #667eea; padding: 8px 16px; border-radius: 6px; cursor: pointer;">Review Plan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Tab -->
+            <div class="tab-content" id="chat">
+                <div class="chat-interface">
+                    <div class="chat-header">
+                        🤖 AI Secretary Assistant - Ask me anything!
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message assistant">
+                            Hi! I'm your AI Secretary. I can help you with scheduling, email management, task prioritization, and any administrative questions. What would you like assistance with today?
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" class="chat-input" id="chatInput" placeholder="Ask me to schedule a meeting, organize your emails, or anything else..." onkeypress="handleChatEnter(event)">
+                        <button class="chat-send" onclick="sendMessage()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-help">
+        💬
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Service connection toggle
+        function toggleConnection(button) {
+            const card = button.closest('.service-card');
+            const isConnected = button.classList.contains('connected');
+            
+            if (isConnected) {
+                button.classList.remove('connected');
+                button.textContent = 'Connect';
+                card.classList.remove('connected');
+            } else {
+                button.classList.add('connected');
+                button.textContent = '✓ Connected';
+                card.classList.add('connected');
+                
+                // Show connection success animation
+                button.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    button.style.transform = 'scale(1)';
+                }, 200);
+            }
+        }
+
+        // Automation toggle
+        function toggleAutomation(toggle) {
+            toggle.classList.toggle('active');
+        }
+
+        // Chat functionality
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Add user message
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user';
+                userMsg.textContent = message;
+                messages.appendChild(userMsg);
+                
+                // Clear input
+                input.value = '';
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message assistant';
+                    aiMsg.textContent = getAIResponse(message);
+                    messages.appendChild(aiMsg);
+                    
+                    // Scroll to bottom
+                    messages.scrollTop = messages.scrollHeight;
+                }, 1000);
+                
+                // Scroll to bottom
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }
+
+        function handleChatEnter(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function getAIResponse(message) {
+            const responses = [
+                "I'd be happy to help you schedule that meeting. Let me check your calendar for available times.",
+                "I can automate that task for you. Would you like me to set up a workflow?",
+                "Based on your email patterns, I suggest prioritizing messages from key clients first.",
+                "I've analyzed your schedule and found 3 potential time slots for that meeting.",
+                "That document has been processed and the key information extracted to your CRM.",
+                "I can help streamline that process. Let me create an automation rule for similar tasks.",
+                "Your productivity metrics show a 40% improvement since implementing these automations.",
+                "I recommend connecting your project management tool to enhance task tracking."
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // Initialize demo with some dynamic content
+        window.addEventListener('load', function() {
+            // Simulate real-time updates
+            setInterval(updateStats, 10000);
+            setInterval(addActivity, 30000);
+        });
+
+        function updateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers[0].textContent = Math.floor(Math.random() * 20) + 40; // Tasks automated
+            statNumbers[2].textContent = Math.floor(Math.random() * 10) + 90 + '%'; // Automation percentage
+        }
+
+        function addActivity() {
+            const activities = [
+                'Email automatically categorized and flagged',
+                'Meeting invitation sent to team members',
+                'Invoice data extracted and logged',
+                'Follow-up reminder scheduled',
+                'Document uploaded to shared drive',
+                'Lead information updated in CRM'
+            ];
+            
+            // This would add new activity items in a real implementation
+            console.log('New activity:', activities[Math.floor(Math.random() * activities.length)]);
+        }
+    </script>
+</body>
+</html>
+                
