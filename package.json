@@ -1,1 +1,14 @@
-
+{
+  "name": "ai-secretary-demo",
+  "version": "1.0.0",
+  "description": "AI Secretary - Automate Your Business Administration",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site ready'",
+    "start": "vercel dev"
+  },
+  "keywords": ["ai", "secretary", "automation", "business"],
+  "author": "NeftyBallers",
+  "license": "MIT"
+}
