@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Secretary - Working Tabs</title>
+    <title>AI Secretary - Automate Your Business Administration</title>
     <style>
         * {
             margin: 0;
@@ -200,12 +200,12 @@
 
         <div class="main-dashboard">
             <div class="nav-tabs">
-                <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
-                <button class="nav-tab" data-tab="integrations">Integrations</button>
-                <button class="nav-tab" data-tab="automations">Automations</button>
-                <button class="nav-tab" data-tab="tasks">Tasks</button>
-                <button class="nav-tab" data-tab="chat">AI Assistant</button>
-                <button class="nav-tab" data-tab="analytics">Analytics</button>
+                <button class="nav-tab active" onclick="switchTab('dashboard', this)">Dashboard</button>
+                <button class="nav-tab" onclick="switchTab('integrations', this)">Integrations</button>
+                <button class="nav-tab" onclick="switchTab('automations', this)">Automations</button>
+                <button class="nav-tab" onclick="switchTab('tasks', this)">Tasks</button>
+                <button class="nav-tab" onclick="switchTab('chat', this)">AI Assistant</button>
+                <button class="nav-tab" onclick="switchTab('analytics', this)">Analytics</button>
             </div>
 
             <!-- Dashboard Tab -->
@@ -413,7 +413,39 @@
     </div>
 
     <script>
-        // Global scope function definitions for onclick handlers
+        console.log("Script loading...");
+        
+        // Use the same approach that worked in the debug version
+        window.switchTab = function(tabName, clickedTab) {
+            console.log("switchTab called:", tabName);
+            
+            try {
+                // Hide all tab contents
+                const tabContents = document.querySelectorAll('.tab-content');
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                // Remove active class from all tabs
+                const navTabs = document.querySelectorAll('.nav-tab');
+                navTabs.forEach(tab => tab.classList.remove('active'));
+                
+                // Show selected tab content
+                const targetTab = document.getElementById(tabName);
+                if (targetTab) {
+                    targetTab.classList.add('active');
+                }
+                
+                // Add active class to clicked tab
+                if (clickedTab) {
+                    clickedTab.classList.add('active');
+                }
+                
+                console.log("Tab switched to:", tabName);
+            } catch (error) {
+                console.error("Error in switchTab:", error);
+            }
+        };
+
+        // Chat functions in global scope
         window.sendMessage = function() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
@@ -475,41 +507,18 @@
             const savings = humanTotal - aiTotal;
             const percentage = ((savings / humanTotal) * 100).toFixed(1);
             
-            document.getElementById('humanTotal').textContent = ' + humanTotal.toLocaleString();
-            document.getElementById('savings').textContent = ' + savings.toLocaleString();
+            document.getElementById('humanTotal').textContent = '$' + humanTotal.toLocaleString();
+            document.getElementById('savings').textContent = '$' + savings.toLocaleString();
             document.getElementById('percentage').textContent = percentage + '% cost reduction';
         };
 
-        // Event listener approach for tab switching (more reliable than onclick)
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            const tabButtons = document.querySelectorAll('.nav-tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetTab = this.getAttribute('data-tab');
-                    
-                    // Remove active class from all tabs and contents
-                    tabButtons.forEach(btn => btn.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(targetTab).classList.add('active');
-                });
-            });
-            
-            // Initialize calculator
+            console.log("DOM loaded, initializing...");
             calculateCosts();
         });
 
-        // Handle enter key in chat
-        document.addEventListener('keydown', function(event) {
-            if (event.target.id === 'chatInput' && event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
+        console.log("Script loaded, switchTab available:", typeof window.switchTab);
     </script>
 </body>
 </html>
