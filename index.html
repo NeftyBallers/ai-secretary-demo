@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Secretary - Complete Dashboard</title>
+    <title>AI Personal Assistant - Enhanced Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -46,6 +46,11 @@
             box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
             overflow: hidden;
             position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
         }
 
         .logo img {
@@ -61,11 +66,29 @@
             font-weight: 700;
             color: white;
             margin-bottom: 10px;
+            animation: fadeInUp 1s ease-out;
         }
 
         .subtitle {
             font-size: 18px;
             color: rgba(255, 255, 255, 0.8);
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .nav-tabs {
@@ -89,12 +112,30 @@
             transition: all 0.3s ease;
             font-size: 16px;
             font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-tab:hover::before {
+            left: 100%;
         }
 
         .nav-tab.active {
             background: rgba(255, 255, 255, 0.2);
             color: white;
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
         }
 
         .nav-tab:hover {
@@ -104,13 +145,19 @@
 
         .tab-content {
             display: none;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* Dashboard Tab Styles */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Enhanced Dashboard Tab Styles */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -125,11 +172,42 @@
             padding: 25px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
         }
 
         .stat-icon {
             font-size: 32px;
             margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         .stat-value {
@@ -137,6 +215,12 @@
             font-weight: 700;
             color: white;
             margin-bottom: 5px;
+            counter-reset: num var(--num);
+        }
+
+        .stat-value.animated::after {
+            content: counter(num);
+            animation: countUp 2s ease-out;
         }
 
         .stat-label {
@@ -144,7 +228,7 @@
             font-size: 14px;
         }
 
-        /* Feature Grid Styles */
+        /* Enhanced Feature Grid Styles */
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -157,16 +241,39 @@
             border-radius: 15px;
             padding: 25px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
         }
 
         .feature-icon {
             font-size: 40px;
             margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(5deg);
         }
 
         .feature-title {
@@ -181,6 +288,31 @@
             font-size: 14px;
         }
 
+        /* Status indicators for integrations */
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-connected {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+
+        .status-pending {
+            background: #FF9800;
+            box-shadow: 0 0 10px #FF9800;
+        }
+
+        .status-disconnected {
+            background: #F44336;
+            box-shadow: 0 0 10px #F44336;
+        }
+
         /* Section Headers */
         .section-header {
             display: flex;
@@ -192,7 +324,7 @@
             color: white;
         }
 
-        /* Tasks Tab Styles */
+        /* Enhanced Tasks Tab Styles */
         .task-list {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -207,6 +339,14 @@
             gap: 15px;
             padding: 15px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            padding-left: 10px;
+            border-radius: 8px;
         }
 
         .task-item:last-child {
@@ -220,6 +360,23 @@
             border-radius: 4px;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .task-checkbox.completed {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .task-checkbox.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
         }
 
         .task-text {
@@ -228,12 +385,43 @@
             transition: all 0.3s ease;
         }
 
+        .task-text.completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
         .task-time {
             color: rgba(255, 255, 255, 0.6);
             font-size: 12px;
         }
 
-        /* AI Assistant Styles */
+        .task-priority {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: rgba(244, 67, 54, 0.2);
+            color: #FF5722;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .priority-medium {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .priority-low {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        /* Enhanced AI Assistant Styles */
         .chat-container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -248,6 +436,26 @@
             padding: 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
+            position: relative;
+        }
+
+        .online-indicator {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #4CAF50;
+            font-size: 12px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
         }
 
         .chat-title {
@@ -271,6 +479,18 @@
             margin-bottom: 15px;
             display: flex;
             gap: 10px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .message.bot {
@@ -286,6 +506,7 @@
             padding: 12px 16px;
             border-radius: 15px;
             font-size: 14px;
+            position: relative;
         }
 
         .message.bot .message-content {
@@ -296,6 +517,38 @@
         .message.user .message-content {
             background: rgba(255, 255, 255, 0.2);
             color: white;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            max-width: 70px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .chat-input-container {
@@ -311,6 +564,7 @@
             background: rgba(255, 255, 255, 0.1);
             color: white;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
 
         .chat-input::placeholder {
@@ -321,6 +575,7 @@
             outline: none;
             border-color: rgba(255, 255, 255, 0.5);
             background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         .quick-actions {
@@ -343,9 +598,10 @@
 
         .quick-action:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
 
-        /* Analytics Tab Styles */
+        /* Enhanced Analytics Tab Styles */
         .calculator-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -388,6 +644,7 @@
             outline: none;
             border-color: rgba(255, 255, 255, 0.5);
             background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
         }
 
         .input-field::placeholder {
@@ -400,6 +657,12 @@
             padding: 20px;
             margin-bottom: 15px;
             border-left: 4px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .cost-display:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 25px rgba(255, 255, 255, 0.1);
         }
 
         .cost-display.ai-cost {
@@ -433,6 +696,16 @@
             padding: 25px;
             text-align: center;
             margin-top: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(86, 171, 47, 0.4);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(86, 171, 47, 0.6);
+            }
         }
 
         .savings-label {
@@ -481,6 +754,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .breakdown-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
         }
 
         .breakdown-label {
@@ -492,6 +771,54 @@
             color: white;
             font-weight: 600;
             font-size: 16px;
+        }
+
+        /* Recent Activity Styles */
+        .activity-feed {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .activity-time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
         }
 
         /* Mobile Responsiveness */
@@ -537,7 +864,7 @@
     <div class="container">
         <div class="header">
             <div class="logo">
-                <img src="https://raw.githubusercontent.com/NeftyBallers/ai-secretary-demo/main/secretary.jpeg" alt="AI Secretary" onerror="this.style.display='none'; this.parentElement.style.fontSize='36px'; this.parentElement.innerHTML='👩‍💼';">
+                <img src="https://raw.githubusercontent.com/NeftyBallers/ai-secretary-demo/main/secretary.jpeg" alt="AI Personal Assistant" onerror="this.style.display='none'; this.parentElement.style.fontSize='36px'; this.parentElement.innerHTML='👩‍💼';">
             </div>
             <h1 class="title">AI Personal Assistant</h1>
             <p class="subtitle">Automate your business administration and eliminate routine tasks</p>
@@ -552,7 +879,7 @@
             <button class="nav-tab" onclick="switchTab('analytics')">Analytics</button>
         </div>
 
-        <!-- Dashboard Tab -->
+        <!-- Enhanced Dashboard Tab -->
         <div id="dashboard" class="tab-content active">
             <div class="section-header">
                 <span>📊</span>
@@ -560,35 +887,72 @@
             </div>
             
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card" onclick="showStatDetail('tasks')">
                     <div class="stat-icon">⚡</div>
-                    <div class="stat-value">247</div>
+                    <div class="stat-value" data-target="247">247</div>
                     <div class="stat-label">Tasks Automated</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="showStatDetail('hours')">
                     <div class="stat-icon">⏰</div>
-                    <div class="stat-value">32.5</div>
+                    <div class="stat-value" data-target="32.5">32.5</div>
                     <div class="stat-label">Hours Saved</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="showStatDetail('savings')">
                     <div class="stat-icon">💰</div>
                     <div class="stat-value">$4,890</div>
                     <div class="stat-label">Monthly Savings</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" onclick="showStatDetail('integrations')">
                     <div class="stat-icon">🔗</div>
-                    <div class="stat-value">12</div>
+                    <div class="stat-value" data-target="12">12</div>
                     <div class="stat-label">Active Integrations</div>
                 </div>
             </div>
 
-            <div class="feature-card">
-                <h3 style="color: white; margin-bottom: 15px;">Recent Activity</h3>
-                <p style="color: rgba(255, 255, 255, 0.8);">Dashboard content - all your recent AI automation activity will appear here.</p>
+            <div class="activity-feed">
+                <h3 style="color: white; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <span>📈</span>
+                    <span>Recent Activity</span>
+                </h3>
+                <div class="activity-item">
+                    <div class="activity-icon">📧</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Processed 23 emails and generated 8 auto-responses</div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📅</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Scheduled meeting with Johnson Corp for next Tuesday</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📊</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Generated weekly productivity report</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🔔</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Sent 5 priority notifications to team members</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📋</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Created 12 action items from morning standup</div>
+                        <div class="activity-time">3 hours ago</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Integrations Tab -->
+        <!-- Enhanced Integrations Tab -->
         <div id="integrations" class="tab-content">
             <div class="section-header">
                 <span>🔗</span>
@@ -598,38 +962,38 @@
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">📧</div>
-                    <div class="feature-title">Email Management</div>
+                    <div class="feature-title">Email Management <span class="status-indicator status-connected"></span></div>
                     <div class="feature-description">Automatically sort, prioritize, and respond to emails using AI-powered filters and templates.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📅</div>
-                    <div class="feature-title">Calendar Scheduling</div>
+                    <div class="feature-title">Calendar Scheduling <span class="status-indicator status-connected"></span></div>
                     <div class="feature-description">Smart scheduling that finds optimal meeting times and manages your calendar automatically.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💼</div>
-                    <div class="feature-title">CRM Integration</div>
+                    <div class="feature-title">CRM Integration <span class="status-indicator status-pending"></span></div>
                     <div class="feature-description">Sync contacts, track interactions, and automate follow-ups across all your customer touchpoints.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📊</div>
-                    <div class="feature-title">Analytics Dashboard</div>
+                    <div class="feature-title">Analytics Dashboard <span class="status-indicator status-connected"></span></div>
                     <div class="feature-description">Real-time insights into your business metrics and automated reporting.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💬</div>
-                    <div class="feature-title">Team Communication</div>
+                    <div class="feature-title">Team Communication <span class="status-indicator status-connected"></span></div>
                     <div class="feature-description">Integrate with Slack, Teams, and other communication tools for seamless workflow.</div>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📁</div>
-                    <div class="feature-title">Document Management</div>
+                    <div class="feature-title">Document Management <span class="status-indicator status-disconnected"></span></div>
                     <div class="feature-description">Automatically organize, tag, and retrieve documents from cloud storage platforms.</div>
                 </div>
             </div>
         </div>
 
-        <!-- Automations Tab -->
+        <!-- Enhanced Automations Tab -->
         <div id="automations" class="tab-content">
             <div class="section-header">
                 <span>⚙️</span>
@@ -638,31 +1002,37 @@
             
             <div class="feature-grid">
                 <div class="feature-card">
+                    <span class="status-indicator status-connected"></span>
                     <div class="feature-icon">📬</div>
                     <div class="feature-title">Email Auto-Response</div>
                     <div class="feature-description">Intelligent email responses based on content analysis and pre-defined business rules.</div>
                 </div>
                 <div class="feature-card">
+                    <span class="status-indicator status-connected"></span>
                     <div class="feature-icon">📋</div>
                     <div class="feature-title">Task Creation</div>
                     <div class="feature-description">Automatically create tasks from emails, meetings, and other business interactions.</div>
                 </div>
                 <div class="feature-card">
+                    <span class="status-indicator status-pending"></span>
                     <div class="feature-icon">📞</div>
                     <div class="feature-title">Meeting Scheduling</div>
                     <div class="feature-description">AI-powered meeting coordination with automatic calendar blocking and participant notifications.</div>
                 </div>
                 <div class="feature-card">
+                    <span class="status-indicator status-connected"></span>
                     <div class="feature-icon">📄</div>
                     <div class="feature-title">Report Generation</div>
                     <div class="feature-description">Automated weekly and monthly reports compiled from your business data and metrics.</div>
                 </div>
                 <div class="feature-card">
+                    <span class="status-indicator status-connected"></span>
                     <div class="feature-icon">🔔</div>
                     <div class="feature-title">Smart Notifications</div>
                     <div class="feature-description">Context-aware alerts that prioritize important information and reduce notification fatigue.</div>
                 </div>
                 <div class="feature-card">
+                    <span class="status-indicator status-pending"></span>
                     <div class="feature-icon">🎯</div>
                     <div class="feature-title">Lead Qualification</div>
                     <div class="feature-description">Automatically score and route leads based on predefined criteria and behavioral patterns.</div>
@@ -670,7 +1040,7 @@
             </div>
         </div>
 
-        <!-- Tasks Tab -->
+        <!-- Enhanced Tasks Tab -->
         <div id="tasks" class="tab-content">
             <div class="section-header">
                 <span>✅</span>
@@ -678,52 +1048,67 @@
             </div>
             
             <div class="task-list">
-                <div class="task-item">
+                <div class="task-item" onclick="toggleTask(this)">
                     <div class="task-checkbox"></div>
                     <div class="task-text">Review quarterly budget report and prepare executive summary</div>
+                    <div class="task-priority priority-high">High</div>
                     <div class="task-time">09:00 AM</div>
                 </div>
-                <div class="task-item">
+                <div class="task-item" onclick="toggleTask(this)">
                     <div class="task-checkbox"></div>
                     <div class="task-text">Follow up with 3 pending client proposals from last week</div>
+                    <div class="task-priority priority-medium">Medium</div>
                     <div class="task-time">10:30 AM</div>
                 </div>
-                <div class="task-item">
+                <div class="task-item" onclick="toggleTask(this)">
                     <div class="task-checkbox"></div>
                     <div class="task-text">Schedule team meeting for project milestone review</div>
+                    <div class="task-priority priority-low">Low</div>
                     <div class="task-time">11:15 AM</div>
                 </div>
-                <div class="task-item">
+                <div class="task-item" onclick="toggleTask(this)">
                     <div class="task-checkbox"></div>
                     <div class="task-text">Update CRM with yesterday's client interactions</div>
+                    <div class="task-priority priority-medium">Medium</div>
                     <div class="task-time">02:00 PM</div>
                 </div>
-                <div class="task-item">
+                <div class="task-item" onclick="toggleTask(this)">
                     <div class="task-checkbox"></div>
                     <div class="task-text">Prepare agenda for tomorrow's board meeting</div>
+                    <div class="task-priority priority-high">High</div>
                     <div class="task-time">03:30 PM</div>
                 </div>
-                <div class="task-item">
+                <div class="task-item" onclick="toggleTask(this)">
                     <div class="task-checkbox"></div>
                     <div class="task-text">Review and approve marketing campaign materials</div>
+                    <div class="task-priority priority-low">Low</div>
                     <div class="task-time">04:15 PM</div>
                 </div>
             </div>
         </div>
 
-        <!-- AI Assistant Tab -->
+        <!-- Enhanced AI Assistant Tab -->
         <div id="assistant" class="tab-content">
             <div class="chat-container">
                 <div class="chat-header">
-                    <div class="chat-title">AI Secretary Assistant</div>
+                    <div class="online-indicator">
+                        <div class="online-dot"></div>
+                        <span>Online</span>
+                    </div>
+                    <div class="chat-title">AI Personal Assistant</div>
                     <div class="chat-subtitle">Ready to help automate your business tasks</div>
                 </div>
                 
                 <div class="chat-messages" id="chatMessages">
                     <div class="message bot">
                         <div class="message-content">
-                            Hello! I'm your AI Secretary. I can help you automate tasks, schedule meetings, manage emails, and much more. What would you like me to help you with today?
+                            Hello! I'm your AI Personal Assistant. I can help you automate tasks, schedule meetings, manage emails, and much more. What would you like me to help you with today?
                         </div>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
                     </div>
                 </div>
                 
@@ -740,7 +1125,7 @@
             </div>
         </div>
 
-        <!-- Analytics Tab -->
+        <!-- Enhanced Analytics Tab -->
         <div id="analytics" class="tab-content">
             <div class="section-header">
                 <span>💼</span>
@@ -828,7 +1213,7 @@
                     <div class="cost-display ai-cost">
                         <div class="cost-label">
                             <span>🤖</span>
-                            <span>AI Secretary Annual Cost</span>
+                            <span>AI Personal Assistant Annual Cost</span>
                         </div>
                         <div class="cost-amount" id="aiCost">$3,588</div>
                         <div class="cost-breakdown">$299/month × 12 months</div>
@@ -882,7 +1267,33 @@
             }
         };
 
-        // Chat functionality
+        // Enhanced task functionality
+        function toggleTask(taskElement) {
+            const checkbox = taskElement.querySelector('.task-checkbox');
+            const text = taskElement.querySelector('.task-text');
+            
+            checkbox.classList.toggle('completed');
+            text.classList.toggle('completed');
+            
+            // Add completion animation
+            if (checkbox.classList.contains('completed')) {
+                taskElement.style.animation = 'slideIn 0.3s ease-out';
+            }
+        }
+
+        // Dashboard stat interactions
+        function showStatDetail(statType) {
+            const details = {
+                tasks: "AI has automated 247 tasks this month, including email responses, calendar scheduling, and report generation.",
+                hours: "Your team has saved 32.5 hours this week through AI automation, equivalent to nearly a full work day.",
+                savings: "Monthly savings of $4,890 comes from reduced administrative overhead and increased productivity.",
+                integrations: "12 business tools are actively connected, including email, calendar, CRM, and project management systems."
+            };
+            
+            alert(details[statType] || "Statistical information about your AI assistant performance.");
+        }
+
+        // Enhanced chat functionality with typing indicator
         function handleChatInput(event) {
             if (event.key === 'Enter') {
                 const input = document.getElementById('chatInput');
@@ -891,13 +1302,28 @@
                     addMessage(message, 'user');
                     input.value = '';
                     
-                    // Simulate AI response
+                    // Show typing indicator
+                    showTypingIndicator();
+                    
+                    // Simulate AI response with delay
                     setTimeout(() => {
+                        hideTypingIndicator();
                         const response = generateAIResponse(message);
                         addMessage(response, 'bot');
-                    }, 1000);
+                    }, 1500);
                 }
             }
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'flex';
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'none';
         }
 
         function addMessage(content, type) {
@@ -912,18 +1338,22 @@
             messageDiv.appendChild(messageContent);
             messagesContainer.appendChild(messageDiv);
             
-            // Scroll to bottom
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const messagesContainer = document.getElementById('chatMessages');
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
         function generateAIResponse(userMessage) {
             const responses = {
-                'schedule': "I'd be happy to help you schedule a meeting! Please provide me with the meeting details: participants, preferred time, and duration. I'll check everyone's availability and send calendar invites.",
+                'schedule': "I'd be happy to help you schedule a meeting! Please provide me with the meeting details: participants, preferred time, and duration. I'll check everyone's availability and send calendar invites automatically.",
                 'calendar': "Let me check your calendar... You have 3 meetings today: 9 AM team standup, 2 PM client presentation, and 4 PM project review. Your next free slot is at 11 AM for 1 hour.",
                 'email': "I can help you draft professional emails. What type of email would you like to create? A follow-up, proposal, meeting invitation, or something else? Please provide the key points you'd like to include.",
-                'task': "I'll create a new task for you. Please specify: 1) Task description, 2) Priority level, 3) Due date, and 4) Any relevant context. I'll add it to your task management system.",
-                'report': "I can generate various reports for you. What type of report do you need? Weekly summary, financial analysis, team performance, or custom metrics? I'll compile the data automatically.",
-                'default': "I understand you'd like assistance with that. As your AI secretary, I can help with scheduling, email management, task creation, report generation, and much more. Could you be more specific about what you need?"
+                'task': "I'll create a new task for you. Please specify: 1) Task description, 2) Priority level (High/Medium/Low), 3) Due date, and 4) Any relevant context. I'll add it to your task management system.",
+                'report': "I can generate various reports for you. What type of report do you need? Weekly summary, financial analysis, team performance, or custom metrics? I'll compile the data automatically from your connected systems.",
+                'default': "I understand you'd like assistance with that. As your AI Personal Assistant, I can help with scheduling, email management, task creation, report generation, and much more. Could you be more specific about what you need?"
             };
             
             const lowerMessage = userMessage.toLowerCase();
@@ -945,13 +1375,15 @@
 
         function quickAction(action) {
             addMessage(action, 'user');
+            showTypingIndicator();
             setTimeout(() => {
+                hideTypingIndicator();
                 const response = generateAIResponse(action);
                 addMessage(response, 'bot');
-            }, 1000);
+            }, 1500);
         }
 
-        // Analytics calculator functionality
+        // Enhanced analytics calculator functionality
         function calculateCosts() {
             // Get input values
             const salary = parseFloat(document.getElementById('salary').value) || 0;
@@ -982,10 +1414,10 @@
             const totalSavings = totalHumanCost - aiCostAnnual;
             const savingsPercentage = ((totalSavings / totalHumanCost) * 100);
 
-            // Update display
-            document.getElementById('humanCost').textContent = `${totalHumanCost.toLocaleString()}`;
-            document.getElementById('aiCost').textContent = `${aiCostAnnual.toLocaleString()}`;
-            document.getElementById('savings').textContent = `${totalSavings.toLocaleString()}`;
+            // Update display with animation
+            animateValue('humanCost', totalHumanCost);
+            animateValue('aiCost', aiCostAnnual);
+            animateValue('savings', totalSavings);
             document.getElementById('savingsPercent').textContent = `${savingsPercentage.toFixed(1)}% cost reduction`;
 
             // Update breakdown
@@ -1000,6 +1432,27 @@
                 'Management Time': managementCost,
                 'Recruitment': recruitment
             });
+        }
+
+        function animateValue(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function updateValue(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentValue = startValue + (targetValue - startValue) * progress;
+                
+                element.textContent = `${Math.floor(currentValue).toLocaleString()}`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateValue);
+                }
+            }
+            
+            requestAnimationFrame(updateValue);
         }
 
         function updateBreakdown(costs) {
@@ -1019,21 +1472,19 @@
             });
         }
 
-        // Task checkbox functionality
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('task-checkbox')) {
-                e.target.style.backgroundColor = e.target.style.backgroundColor ? '' : 'rgba(255, 255, 255, 0.3)';
-                const taskText = e.target.nextElementSibling;
-                if (taskText) {
-                    taskText.style.textDecoration = taskText.style.textDecoration === 'line-through' ? '' : 'line-through';
-                    taskText.style.opacity = taskText.style.opacity === '0.5' ? '' : '0.5';
-                }
-            }
-        });
-
-        // Initialize calculations on page load
+        // Initialize calculations and animations on page load
         window.addEventListener('load', function() {
             calculateCosts();
+            
+            // Animate dashboard stats on load
+            setTimeout(() => {
+                const statCards = document.querySelectorAll('.stat-card');
+                statCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    }, index * 100);
+                });
+            }, 500);
         });
     </script>
 </body>
