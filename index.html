@@ -833,3 +833,215 @@
                     </div>
 
                     <div class="cost-display ai-cost">
+                        <div class="cost-label">
+                            <span>🤖</span>
+                            <span>AI Secretary Annual Cost</span>
+                        </div>
+                        <div class="cost-amount" id="aiCost">$3,588</div>
+                        <div class="cost-breakdown">$299/month × 12 months</div>
+                    </div>
+
+                    <div class="savings-display">
+                        <div class="savings-label">
+                            <span>💰</span>
+                            <span>Your Annual Savings</span>
+                        </div>
+                        <div class="savings-amount" id="savings">$81,912</div>
+                        <div class="savings-percentage" id="savingsPercent">95.8% cost reduction</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Breakdown Section -->
+            <div class="cost-breakdown-section">
+                <div class="section-header">
+                    <span>📋</span>
+                    <span>Detailed Cost Breakdown</span>
+                </div>
+                <div class="breakdown-grid" id="breakdownGrid">
+                    <!-- Breakdown items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global tab switching function
+        window.switchTab = function(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Add active class to clicked nav tab
+            const clickedTab = event?.target || document.querySelector(`[onclick*="${tabName}"]`);
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
+        };
+
+        // Chat functionality
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                if (message) {
+                    addMessage(message, 'user');
+                    input.value = '';
+                    
+                    // Simulate AI response
+                    setTimeout(() => {
+                        const response = generateAIResponse(message);
+                        addMessage(response, 'bot');
+                    }, 1000);
+                }
+            }
+        }
+
+        function addMessage(content, type) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = content;
+            
+            messageDiv.appendChild(messageContent);
+            messagesContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function generateAIResponse(userMessage) {
+            const responses = {
+                'schedule': "I'd be happy to help you schedule a meeting! Please provide me with the meeting details: participants, preferred time, and duration. I'll check everyone's availability and send calendar invites.",
+                'calendar': "Let me check your calendar... You have 3 meetings today: 9 AM team standup, 2 PM client presentation, and 4 PM project review. Your next free slot is at 11 AM for 1 hour.",
+                'email': "I can help you draft professional emails. What type of email would you like to create? A follow-up, proposal, meeting invitation, or something else? Please provide the key points you'd like to include.",
+                'task': "I'll create a new task for you. Please specify: 1) Task description, 2) Priority level, 3) Due date, and 4) Any relevant context. I'll add it to your task management system.",
+                'report': "I can generate various reports for you. What type of report do you need? Weekly summary, financial analysis, team performance, or custom metrics? I'll compile the data automatically.",
+                'default': "I understand you'd like assistance with that. As your AI secretary, I can help with scheduling, email management, task creation, report generation, and much more. Could you be more specific about what you need?"
+            };
+            
+            const lowerMessage = userMessage.toLowerCase();
+            
+            if (lowerMessage.includes('schedule') || lowerMessage.includes('meeting')) {
+                return responses.schedule;
+            } else if (lowerMessage.includes('calendar') || lowerMessage.includes('appointment')) {
+                return responses.calendar;
+            } else if (lowerMessage.includes('email') || lowerMessage.includes('message')) {
+                return responses.email;
+            } else if (lowerMessage.includes('task') || lowerMessage.includes('todo')) {
+                return responses.task;
+            } else if (lowerMessage.includes('report') || lowerMessage.includes('analysis')) {
+                return responses.report;
+            } else {
+                return responses.default;
+            }
+        }
+
+        function quickAction(action) {
+            addMessage(action, 'user');
+            setTimeout(() => {
+                const response = generateAIResponse(action);
+                addMessage(response, 'bot');
+            }, 1000);
+        }
+
+        // Analytics calculator functionality
+        function calculateCosts() {
+            // Get input values
+            const salary = parseFloat(document.getElementById('salary').value) || 0;
+            const health = parseFloat(document.getElementById('health').value) || 0;
+            const payrollTaxRate = parseFloat(document.getElementById('payrollTax').value) || 0;
+            const workersComp = parseFloat(document.getElementById('workersComp').value) || 0;
+            const officeSpaceMonthly = parseFloat(document.getElementById('officeSpace').value) || 0;
+            const training = parseFloat(document.getElementById('training').value) || 0;
+            const ptoWeeks = parseFloat(document.getElementById('pto').value) || 0;
+            const managementHours = parseFloat(document.getElementById('management').value) || 0;
+            const managerRate = parseFloat(document.getElementById('managerRate').value) || 0;
+            const recruitment = parseFloat(document.getElementById('recruitment').value) || 0;
+
+            // Calculate derived costs
+            const payrollTaxes = salary * (payrollTaxRate / 100);
+            const officeSpaceAnnual = officeSpaceMonthly * 12;
+            const ptoValue = (salary / 48) * ptoWeeks; // 48 working weeks in a year
+            const managementCost = managementHours * 52 * managerRate; // 52 weeks
+
+            // Total human cost
+            const totalHumanCost = salary + health + payrollTaxes + workersComp + 
+                                 officeSpaceAnnual + training + ptoValue + managementCost + recruitment;
+
+            // AI cost (fixed)
+            const aiCostAnnual = 299 * 12;
+
+            // Savings calculation
+            const totalSavings = totalHumanCost - aiCostAnnual;
+            const savingsPercentage = ((totalSavings / totalHumanCost) * 100);
+
+            // Update display
+            document.getElementById('humanCost').textContent = `${totalHumanCost.toLocaleString()}`;
+            document.getElementById('aiCost').textContent = `${aiCostAnnual.toLocaleString()}`;
+            document.getElementById('savings').textContent = `${totalSavings.toLocaleString()}`;
+            document.getElementById('savingsPercent').textContent = `${savingsPercentage.toFixed(1)}% cost reduction`;
+
+            // Update breakdown
+            updateBreakdown({
+                'Base Salary': salary,
+                'Health Insurance': health,
+                'Payroll Taxes': payrollTaxes,
+                'Workers\' Comp': workersComp,
+                'Office Space': officeSpaceAnnual,
+                'Training Costs': training,
+                'Paid Time Off': ptoValue,
+                'Management Time': managementCost,
+                'Recruitment': recruitment
+            });
+        }
+
+        function updateBreakdown(costs) {
+            const breakdownGrid = document.getElementById('breakdownGrid');
+            breakdownGrid.innerHTML = '';
+
+            Object.entries(costs).forEach(([label, value]) => {
+                if (value > 0) {
+                    const item = document.createElement('div');
+                    item.className = 'breakdown-item';
+                    item.innerHTML = `
+                        <div class="breakdown-label">${label}</div>
+                        <div class="breakdown-value">${value.toLocaleString()}</div>
+                    `;
+                    breakdownGrid.appendChild(item);
+                }
+            });
+        }
+
+        // Task checkbox functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('task-checkbox')) {
+                e.target.style.backgroundColor = e.target.style.backgroundColor ? '' : 'rgba(255, 255, 255, 0.3)';
+                const taskText = e.target.nextElementSibling;
+                if (taskText) {
+                    taskText.style.textDecoration = taskText.style.textDecoration === 'line-through' ? '' : 'line-through';
+                    taskText.style.opacity = taskText.style.opacity === '0.5' ? '' : '0.5';
+                }
+            }
+        });
+
+        // Initialize calculations on page load
+        window.addEventListener('load', function() {
+            calculateCosts();
+        });
+    </script>
+</body>
+</html>
