@@ -900,7 +900,7 @@
         // Chat functionality
         let messageCount = 0;
 
-        function switchTab(tabName) {
+        function switchTab(tabName, clickedTab) {
             // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(content => content.classList.remove('active'));
@@ -913,7 +913,7 @@
             document.getElementById(tabName).classList.add('active');
             
             // Add active class to clicked tab
-            event.target.classList.add('active');
+            clickedTab.classList.add('active');
             
             // Initialize analytics if analytics tab is opened
             if (tabName === 'analytics') {
