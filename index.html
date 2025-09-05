@@ -115,7 +115,230 @@
             font-size: 0.9rem;
         }
 
-        /* Analytics Styles */
+        /* Chat Interface Styles */
+        .chat-container {
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .chat-info h3 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+        .chat-info p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .chat-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9ff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.ai {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user {
+            background: white;
+            color: #333;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+            color: white;
+            max-width: 80px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: white;
+            opacity: 0.4;
+            animation: typingDot 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingDot {
+            0%, 60%, 100% { opacity: 0.4; }
+            30% { opacity: 1; }
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e7ff;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e7ff;
+            border-radius: 25px;
+            font-size: 1rem;
+            resize: none;
+            min-height: 50px;
+            max-height: 120px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        .chat-send-btn {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .chat-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.3);
+        }
+
+        .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            padding: 8px 16px;
+            background: rgba(102,126,234,0.1);
+            border: 1px solid rgba(102,126,234,0.2);
+            border-radius: 20px;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(102,126,234,0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Analytics Styles (keeping existing) */
         .analytics-section {
             background: rgba(102,126,234,0.1);
             border-radius: 15px;
@@ -368,6 +591,23 @@
             .metric-value {
                 font-size: 1.5rem;
             }
+
+            .chat-container {
+                height: 500px;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+
+            .nav-tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .quick-actions {
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -432,8 +672,59 @@
 
             <!-- Chat Tab -->
             <div class="tab-content" id="chat">
-                <h3 style="margin-bottom: 20px; color: #333;">AI Assistant Chat</h3>
-                <p style="color: #666; padding: 20px; background: #f8f9ff; border-radius: 10px;">Interactive AI chat interface will be available here.</p>
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-avatar">🤖</div>
+                        <div class="chat-info">
+                            <h3>AI Secretary Assistant</h3>
+                            <p>Ready to help automate your business tasks</p>
+                        </div>
+                        <div class="chat-status">
+                            <div class="status-dot"></div>
+                            <span>Online</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message ai">
+                            <div>👋 Hello! I'm your AI Secretary Assistant. I'm here to help you automate administrative tasks, manage your schedule, handle emails, and streamline your business operations.</div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                        <div class="message ai">
+                            <div>What would you like me to help you with today? I can assist with scheduling, email management, document creation, task automation, and much more!</div>
+                            <div class="message-time">Just now</div>
+                        </div>
+                    </div>
+
+                    <div class="typing-indicator" id="typingIndicator">
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="quick-actions">
+                            <button class="quick-action-btn" onclick="sendQuickMessage('Schedule a meeting')">📅 Schedule Meeting</button>
+                            <button class="quick-action-btn" onclick="sendQuickMessage('Help with email management')">📧 Email Help</button>
+                            <button class="quick-action-btn" onclick="sendQuickMessage('Create a document')">📄 Create Document</button>
+                            <button class="quick-action-btn" onclick="sendQuickMessage('Set up automation')">⚡ Setup Automation</button>
+                        </div>
+                        <div class="chat-input-wrapper">
+                            <textarea 
+                                class="chat-input" 
+                                id="chatInput" 
+                                placeholder="Type your message here..."
+                                rows="1"
+                                onkeydown="handleKeyPress(event)"
+                                oninput="autoResize(this)"></textarea>
+                            <button class="chat-send-btn" id="sendBtn" onclick="sendMessage()">
+                                ➤
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Analytics Tab -->
@@ -606,6 +897,9 @@
     </div>
 
     <script>
+        // Chat functionality
+        let messageCount = 0;
+
         function switchTab(tabName) {
             // Hide all tab contents
             const tabContents = document.querySelectorAll('.tab-content');
@@ -625,8 +919,150 @@
             if (tabName === 'analytics') {
                 setTimeout(calculateCosts, 100);
             }
+
+            // Focus chat input if chat tab is opened
+            if (tabName === 'chat') {
+                setTimeout(() => {
+                    document.getElementById('chatInput').focus();
+                }, 100);
+            }
         }
 
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            
+            // Clear input
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response after delay
+            setTimeout(() => {
+                hideTypingIndicator();
+                generateAIResponse(message);
+            }, 1000 + Math.random() * 2000);
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('chatInput').value = message;
+            sendMessage();
+        }
+
+        function addMessage(content, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div>${content}</div>
+                <div class="message-time">${time}</div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messageCount++;
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'block';
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'none';
+        }
+
+        function generateAIResponse(userMessage) {
+            const responses = getContextualResponse(userMessage.toLowerCase());
+            const response = responses[Math.floor(Math.random() * responses.length)];
+            addMessage(response, 'ai');
+        }
+
+        function getContextualResponse(message) {
+            if (message.includes('schedule') || message.includes('meeting') || message.includes('calendar')) {
+                return [
+                    "I'd be happy to help you schedule a meeting! I can integrate with your calendar system to find available times, send invitations, and set up recurring meetings. What type of meeting would you like to schedule?",
+                    "📅 Perfect! I can help you manage your calendar efficiently. I can check availability, book meeting rooms, send automated reminders, and even prepare meeting agendas. When would you like to schedule this?",
+                    "Let me assist with your scheduling needs! I can coordinate with multiple attendees, find optimal meeting times, and handle all the logistics. What's the purpose and duration of your meeting?"
+                ];
+            }
+            
+            if (message.includes('email') || message.includes('mail')) {
+                return [
+                    "📧 I'm excellent at email management! I can help you sort emails by priority, draft responses, set up auto-replies, create email templates, and even manage your inbox organization. What specific email task can I help with?",
+                    "Email automation is one of my specialties! I can filter spam, categorize important messages, schedule email sending, and create professional templates. How would you like me to streamline your email workflow?",
+                    "I can transform your email management! From smart sorting to automated responses, I'll help you achieve inbox zero. I can also draft emails in your style and manage follow-ups. What's your biggest email challenge?"
+                ];
+            }
+            
+            if (message.includes('document') || message.includes('report') || message.includes('create')) {
+                return [
+                    "📄 I can help you create professional documents! Whether it's reports, proposals, invoices, or presentations, I can generate content, format documents, and ensure consistency. What type of document do you need?",
+                    "Document creation is something I excel at! I can draft contracts, create templates, generate reports from data, and maintain your document library. What document would you like me to help you with?",
+                    "Let me assist with your document needs! I can create everything from simple letters to complex reports, ensure proper formatting, and maintain version control. What's the purpose of the document you need?"
+                ];
+            }
+            
+            if (message.includes('automation') || message.includes('automate') || message.includes('workflow')) {
+                return [
+                    "⚡ Automation is my core strength! I can set up workflows that handle repetitive tasks, integrate different systems, and create rules that work 24/7. What processes would you like me to automate?",
+                    "I love setting up automations! From simple task reminders to complex multi-step workflows, I can streamline your entire operation. What repetitive tasks are taking up too much of your time?",
+                    "Workflow automation can save you hours every day! I can connect your tools, create triggers and actions, and handle routine processes automatically. Which area of your business needs automation first?"
+                ];
+            }
+            
+            if (message.includes('cost') || message.includes('save') || message.includes('money') || message.includes('roi')) {
+                return [
+                    "💰 Based on our cost calculator, businesses typically save 90-95% on administrative costs by switching to AI automation. You could save thousands annually while getting 24/7 availability and consistent performance!",
+                    "The ROI on AI automation is incredible! Most of my clients see payback within the first month. No sick days, no vacation time, no benefits costs - just reliable, efficient service. Would you like me to calculate your specific savings?",
+                    "Cost savings are just the beginning! Beyond the 95% reduction in secretary costs, you'll gain productivity, consistency, and scalability. Your business can grow without proportionally increasing administrative overhead."
+                ];
+            }
+            
+            if (message.includes('help') || message.includes('what can you') || message.includes('capabilities')) {
+                return [
+                    "I'm your complete AI business assistant! I can handle scheduling, email management, document creation, data analysis, customer service, social media posting, invoice processing, and much more. What's your biggest administrative challenge?",
+                    "My capabilities span across all business administration: 📅 Calendar management, 📧 Email automation, 📄 Document creation, 📊 Data processing, 🤝 Customer communications, and ⚡ Workflow automation. How can I help streamline your operations?",
+                    "Think of me as your 24/7 business partner! I can manage your daily operations, handle customer inquiries, process data, create content, manage social media, and automate repetitive tasks. What would you like to tackle first?"
+                ];
+            }
+            
+            // Default responses
+            return [
+                "That's a great question! I'm here to help automate your business processes and save you time. Could you tell me more about what specific task or challenge you're facing?",
+                "I'd love to help you with that! As your AI secretary, I can handle a wide range of administrative tasks. What would you like me to focus on first?",
+                "Excellent! I'm designed to streamline business operations and eliminate repetitive tasks. What area of your business could benefit most from automation?",
+                "I'm ready to assist! Whether it's scheduling, communications, document management, or process automation, I'm here to make your business more efficient. What can I help you with?",
+                "Perfect! I specialize in business automation and administrative support. From email management to workflow optimization, I'm here to help. What's your priority right now?"
+            ];
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
+        }
+
+        // Analytics functionality (keeping existing)
         function calculateCosts() {
             const salary = parseFloat(document.getElementById('salary').value) || 0;
             const insurance = parseFloat(document.getElementById('insurance').value) || 0;
@@ -646,14 +1082,14 @@
             const savings = Math.max(humanTotal - aiTotal, 0);
             const savingsPercentage = humanTotal > 0 ? (savings / humanTotal) * 100 : 0;
 
-            updateElement('human-total', '$' + humanTotal.toLocaleString());
+            updateElement('human-total', ' + humanTotal.toLocaleString());
             updateElement('human-breakdown', 'Available ' + availabilityPercentage.toFixed(1) + '% of year (' + workingDays + ' working days)');
-            updateElement('ai-total', '$' + aiTotal.toLocaleString());
-            updateElement('savings-total', '$' + savings.toLocaleString());
+            updateElement('ai-total', ' + aiTotal.toLocaleString());
+            updateElement('savings-total', ' + savings.toLocaleString());
             updateElement('savings-percentage', savingsPercentage.toFixed(1) + '% cost reduction');
 
             const monthlySavings = savings / 12;
-            updateElement('total-roi', '$' + Math.round(monthlySavings).toLocaleString());
+            updateElement('total-roi', ' + Math.round(monthlySavings).toLocaleString());
 
             updateBreakdown(salary, insurance, superAmount, benefits, daysOff, humanTotal, workingDays, aiTotal, savings);
         }
@@ -672,14 +1108,14 @@
             
             const breakdown = 
                 '<strong>Human Secretary Breakdown:</strong><br>' +
-                '• Base Salary: $' + salary.toLocaleString() + '<br>' +
-                '• Health Insurance: $' + insurance.toLocaleString() + '<br>' +
-                '• Superannuation: $' + Math.round(superAmount).toLocaleString() + '<br>' +
-                '• Other Benefits: $' + benefits.toLocaleString() + '<br>' +
+                '• Base Salary:  + salary.toLocaleString() + '<br>' +
+                '• Health Insurance:  + insurance.toLocaleString() + '<br>' +
+                '• Superannuation:  + Math.round(superAmount).toLocaleString() + '<br>' +
+                '• Other Benefits:  + benefits.toLocaleString() + '<br>' +
                 '• Total Leave: ' + daysOff + ' days per year<br><br>' +
                 '<strong>Daily Cost Analysis:</strong><br>' +
-                '• Human cost per working day: $' + costPerDay + '<br>' +
-                '• AI cost per day: $' + aiCostPerDay + ' (24/7 available)<br>' +
+                '• Human cost per working day:  + costPerDay + '<br>' +
+                '• AI cost per day:  + aiCostPerDay + ' (24/7 available)<br>' +
                 '• Break-even timeline: ' + breakEvenDays + ' days';
             
             const element = document.getElementById('cost-breakdown');
@@ -699,6 +1135,12 @@
         function shareReport() {
             alert('Opening share options... Generate shareable links or export summaries for stakeholders.');
         }
+
+        // Initialize chat on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-calculate costs on page load
+            calculateCosts();
+        });
     </script>
 </body>
 </html>
