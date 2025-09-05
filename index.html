@@ -1,239 +1,1801 @@
-<!-- Developer Setup Tab -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Personal Assistant - Enhanced Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+        }
+
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 8px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-tab:hover::before {
+            left: 100%;
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Enhanced Dashboard Tab Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+            counter-reset: num var(--num);
+        }
+
+        .stat-value.animated::after {
+            content: counter(num);
+            animation: countUp 2s ease-out;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        /* Enhanced Feature Grid Styles */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .feature-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        /* Status indicators for integrations */
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .status-connected {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+
+        .status-pending {
+            background: #FF9800;
+            box-shadow: 0 0 10px #FF9800;
+        }
+
+        .status-disconnected {
+            background: #F44336;
+            box-shadow: 0 0 10px #F44336;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Enhanced Tasks Tab Styles */
+        .task-list {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            padding-left: 10px;
+            border-radius: 8px;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .task-checkbox.completed {
+            background: #4CAF50;
+            border-color: #4CAF50;
+        }
+
+        .task-checkbox.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .task-text {
+            color: white;
+            flex: 1;
+            transition: all 0.3s ease;
+        }
+
+        .task-text.completed {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .task-time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        .task-priority {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .priority-high {
+            background: rgba(244, 67, 54, 0.2);
+            color: #FF5722;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .priority-medium {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .priority-low {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        /* Enhanced AI Assistant Styles */
+        .chat-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+        }
+
+        .online-indicator {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #4CAF50;
+            font-size: 12px;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .chat-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .chat-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .message.bot .message-content {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .message.user .message-content {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            max-width: 70px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Analytics Tab Styles */
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .calculator-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .cost-display {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff6b6b;
+            transition: all 0.3s ease;
+        }
+
+        .cost-display:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        .cost-display.ai-cost {
+            border-left-color: #4ecdc4;
+        }
+
+        .cost-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .cost-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .cost-breakdown {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+
+        .savings-display {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 20px rgba(86, 171, 47, 0.4);
+            }
+            to {
+                box-shadow: 0 0 30px rgba(86, 171, 47, 0.6);
+            }
+        }
+
+        .savings-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .savings-amount {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .savings-percentage {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .cost-breakdown-section {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .breakdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .breakdown-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .breakdown-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .breakdown-value {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Recent Activity Styles */
+        .activity-feed {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            color: white;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .activity-time {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+        }
+
+        /* Developer Setup Tab Styles */
+        .dev-intro {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .integration-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .integration-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+        }
+
+        .integration-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .integration-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .integration-name {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .difficulty-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .difficulty-easy {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .difficulty-medium {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .difficulty-hard {
+            background: rgba(244, 67, 54, 0.2);
+            color: #FF5722;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .integration-desc {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .integration-steps {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .steps-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .steps-list {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .code-example {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            color: #4CAF50;
+            border-left: 3px solid #4CAF50;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+
+        .integration-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .integration-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .title {
+                font-size: 32px;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .nav-tab {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .breakdown-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/NeftyBallers/ai-secretary-demo/main/secretary.jpeg" alt="AI Personal Assistant" onerror="this.style.display='none'; this.parentElement.style.fontSize='36px'; this.parentElement.innerHTML='👩‍💼';">
+            </div>
+            <h1 class="title">AI Personal Assistant</h1>
+            <p class="subtitle">Automate your business administration and eliminate routine tasks</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('integrations')">Integrations</button>
+            <button class="nav-tab" onclick="switchTab('automations')">Automations</button>
+            <button class="nav-tab" onclick="switchTab('tasks')">Tasks</button>
+            <button class="nav-tab" onclick="switchTab('assistant')">AI Assistant</button>
+            <button class="nav-tab" onclick="switchTab('analytics')">Analytics</button>
+            <button class="nav-tab" onclick="switchTab('developer')">Developer Setup</button>
+        </div>
+
+        <!-- Enhanced Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="section-header">
+                <span>📊</span>
+                <span>Dashboard Overview</span>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card" onclick="showStatDetail('tasks')">
+                    <div class="stat-icon">⚡</div>
+                    <div class="stat-value" data-target="247">247</div>
+                    <div class="stat-label">Tasks Automated</div>
+                </div>
+                <div class="stat-card" onclick="showStatDetail('hours')">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-value" data-target="32.5">32.5</div>
+                    <div class="stat-label">Hours Saved</div>
+                </div>
+                <div class="stat-card" onclick="showStatDetail('savings')">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-value">$4,890</div>
+                    <div class="stat-label">Monthly Savings</div>
+                </div>
+                <div class="stat-card" onclick="showStatDetail('integrations')">
+                    <div class="stat-icon">🔗</div>
+                    <div class="stat-value" data-target="12">12</div>
+                    <div class="stat-label">Active Integrations</div>
+                </div>
+            </div>
+
+            <div class="activity-feed">
+                <h3 style="color: white; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                    <span>📈</span>
+                    <span>Recent Activity</span>
+                </h3>
+                <div class="activity-item">
+                    <div class="activity-icon">📧</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Processed 23 emails and generated 8 auto-responses</div>
+                        <div class="activity-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📅</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Scheduled meeting with Johnson Corp for next Tuesday</div>
+                        <div class="activity-time">15 minutes ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📊</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Generated weekly productivity report</div>
+                        <div class="activity-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">🔔</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Sent 5 priority notifications to team members</div>
+                        <div class="activity-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon">📋</div>
+                    <div class="activity-content">
+                        <div class="activity-text">Created 12 action items from morning standup</div>
+                        <div class="activity-time">3 hours ago</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Integrations Tab -->
+        <div id="integrations" class="tab-content">
+            <div class="section-header">
+                <span>🔗</span>
+                <span>Connect Your Business Tools</span>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📧</div>
+                    <div class="feature-title">Email Management <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Automatically sort, prioritize, and respond to emails using AI-powered filters and templates.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📅</div>
+                    <div class="feature-title">Calendar Scheduling <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Smart scheduling that finds optimal meeting times and manages your calendar automatically.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💼</div>
+                    <div class="feature-title">CRM Integration <span class="status-indicator status-pending"></span></div>
+                    <div class="feature-description">Sync contacts, track interactions, and automate follow-ups across all your customer touchpoints.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Analytics Dashboard <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Real-time insights into your business metrics and automated reporting.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <div class="feature-title">Team Communication <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Integrate with Slack, Teams, and other communication tools for seamless workflow.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <div class="feature-title">Document Management <span class="status-indicator status-disconnected"></span></div>
+                    <div class="feature-description">Automatically organize, tag, and retrieve documents from cloud storage platforms.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Automations Tab -->
+        <div id="automations" class="tab-content">
+            <div class="section-header">
+                <span>⚙️</span>
+                <span>AI Automation Rules</span>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📬</div>
+                    <div class="feature-title">Email Auto-Response <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Intelligent email responses based on content analysis and pre-defined business rules.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <div class="feature-title">Task Creation <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Automatically create tasks from emails, meetings, and other business interactions.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📞</div>
+                    <div class="feature-title">Meeting Scheduling <span class="status-indicator status-pending"></span></div>
+                    <div class="feature-description">AI-powered meeting coordination with automatic calendar blocking and participant notifications.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📄</div>
+                    <div class="feature-title">Report Generation <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Automated weekly and monthly reports compiled from your business data and metrics.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔔</div>
+                    <div class="feature-title">Smart Notifications <span class="status-indicator status-connected"></span></div>
+                    <div class="feature-description">Context-aware alerts that prioritize important information and reduce notification fatigue.</div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Lead Qualification <span class="status-indicator status-pending"></span></div>
+                    <div class="feature-description">Automatically score and route leads based on predefined criteria and behavioral patterns.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Tasks Tab -->
+        <div id="tasks" class="tab-content">
+            <div class="section-header">
+                <span>✅</span>
+                <span>Today's AI-Generated Tasks</span>
+            </div>
+            
+            <div class="task-list">
+                <div class="task-item" onclick="toggleTask(this)">
+                    <div class="task-checkbox"></div>
+                    <div class="task-text">Review quarterly budget report and prepare executive summary</div>
+                    <div class="task-priority priority-high">High</div>
+                    <div class="task-time">09:00 AM</div>
+                </div>
+                <div class="task-item" onclick="toggleTask(this)">
+                    <div class="task-checkbox"></div>
+                    <div class="task-text">Follow up with 3 pending client proposals from last week</div>
+                    <div class="task-priority priority-medium">Medium</div>
+                    <div class="task-time">10:30 AM</div>
+                </div>
+                <div class="task-item" onclick="toggleTask(this)">
+                    <div class="task-checkbox"></div>
+                    <div class="task-text">Schedule team meeting for project milestone review</div>
+                    <div class="task-priority priority-low">Low</div>
+                    <div class="task-time">11:15 AM</div>
+                </div>
+                <div class="task-item" onclick="toggleTask(this)">
+                    <div class="task-checkbox"></div>
+                    <div class="task-text">Update CRM with yesterday's client interactions</div>
+                    <div class="task-priority priority-medium">Medium</div>
+                    <div class="task-time">02:00 PM</div>
+                </div>
+                <div class="task-item" onclick="toggleTask(this)">
+                    <div class="task-checkbox"></div>
+                    <div class="task-text">Prepare agenda for tomorrow's board meeting</div>
+                    <div class="task-priority priority-high">High</div>
+                    <div class="task-time">03:30 PM</div>
+                </div>
+                <div class="task-item" onclick="toggleTask(this)">
+                    <div class="task-checkbox"></div>
+                    <div class="task-text">Review and approve marketing campaign materials</div>
+                    <div class="task-priority priority-low">Low</div>
+                    <div class="task-time">04:15 PM</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced AI Assistant Tab -->
+        <div id="assistant" class="tab-content">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="online-indicator">
+                        <div class="online-dot"></div>
+                        <span>Online</span>
+                    </div>
+                    <div class="chat-title">AI Personal Assistant</div>
+                    <div class="chat-subtitle">Ready to help automate your business tasks</div>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        <div class="message-content">
+                            Hello! I'm your AI Personal Assistant. I can help you automate tasks, schedule meetings, manage emails, and much more. What would you like me to help you with today?
+                        </div>
+                    </div>
+                    <div class="typing-indicator" id="typingIndicator">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Type your message here..." onkeypress="handleChatInput(event)">
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="quickAction('Schedule a meeting')">📅 Schedule Meeting</div>
+                        <div class="quick-action" onclick="quickAction('Check my calendar')">📋 Check Calendar</div>
+                        <div class="quick-action" onclick="quickAction('Draft an email')">📧 Draft Email</div>
+                        <div class="quick-action" onclick="quickAction('Create a task')">✅ Create Task</div>
+                        <div class="quick-action" onclick="quickAction('Generate report')">📊 Generate Report</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Analytics Tab -->
+        <div id="analytics" class="tab-content">
+            <div class="section-header">
+                <span>💼</span>
+                <span>Comprehensive Cost Savings Calculator</span>
+            </div>
+            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px; text-align: center;">
+                See the true cost of hiring a human secretary vs AI automation - including all hidden expenses
+            </p>
+
+            <div class="calculator-container">
+                <!-- Input Section -->
+                <div class="calculator-section">
+                    <div class="section-header">
+                        <span>📊</span>
+                        <span>Enter Your Secretary Costs</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Annual Salary ($)</label>
+                        <input type="number" class="input-field" id="salary" value="55000" placeholder="55000" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Health Insurance ($)</label>
+                        <input type="number" class="input-field" id="health" value="8500" placeholder="8500" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Payroll Taxes (%) - FICA, Medicare, Unemployment</label>
+                        <input type="number" class="input-field" id="payrollTax" value="7.65" placeholder="7.65" step="0.01" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Workers' Compensation Insurance ($)</label>
+                        <input type="number" class="input-field" id="workersComp" value="800" placeholder="800" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Office Space & Equipment ($/month)</label>
+                        <input type="number" class="input-field" id="officeSpace" value="500" placeholder="500" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Training & Onboarding Costs ($)</label>
+                        <input type="number" class="input-field" id="training" value="3000" placeholder="3000" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Paid Time Off Value (weeks/year)</label>
+                        <input type="number" class="input-field" id="pto" value="4" placeholder="4" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Management Time (hours/week)</label>
+                        <input type="number" class="input-field" id="management" value="2" placeholder="2" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Manager Hourly Rate ($)</label>
+                        <input type="number" class="input-field" id="managerRate" value="50" placeholder="50" oninput="calculateCosts()">
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Recruitment Costs ($) - if applicable</label>
+                        <input type="number" class="input-field" id="recruitment" value="5000" placeholder="5000" oninput="calculateCosts()">
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div class="calculator-section">
+                    <div class="section-header">
+                        <span>🔥</span>
+                        <span>Cost Comparison</span>
+                    </div>
+
+                    <div class="cost-display">
+                        <div class="cost-label">
+                            <span>👤</span>
+                            <span>Human Secretary Total Cost</span>
+                        </div>
+                        <div class="cost-amount" id="humanCost">$85,500</div>
+                        <div class="cost-breakdown" id="humanBreakdown">Including all benefits, taxes, and overhead</div>
+                    </div>
+
+                    <div class="cost-display ai-cost">
+                        <div class="cost-label">
+                            <span>🤖</span>
+                            <span>AI Personal Assistant Annual Cost</span>
+                        </div>
+                        <div class="cost-amount" id="aiCost">$3,588</div>
+                        <div class="cost-breakdown">$299/month × 12 months</div>
+                    </div>
+
+                    <div class="savings-display">
+                        <div class="savings-label">
+                            <span>💰</span>
+                            <span>Your Annual Savings</span>
+                        </div>
+                        <div class="savings-amount" id="savings">$81,912</div>
+                        <div class="savings-percentage" id="savingsPercent">95.8% cost reduction</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Breakdown Section -->
+            <div class="cost-breakdown-section">
+                <div class="section-header">
+                    <span>📋</span>
+                    <span>Detailed Cost Breakdown</span>
+                </div>
+                <div class="breakdown-grid" id="breakdownGrid">
+                    <!-- Breakdown items will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Developer Setup Tab -->
         <div id="developer" class="tab-content">
             <div class="section-header">
                 <span>🔧</span>
                 <span>API Integration Guide</span>
             </div>
-            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 30px; text-align: center;">
-                Connect your business tools to the AI Personal Assistant with these step-by-step integration guides
-            </p>
+            <div class="dev-intro">
+                Connect your business tools to the AI Personal Assistant with step-by-step integration guides
+            </div>
 
-            <div class="integration-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-bottom: 40px;">
-                <!-- Gmail Integration -->
-                <div class="integration-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
-                    <div class="integration-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <div class="integration-icon" style="font-size: 32px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;">📧</div>
-                        <div class="integration-title" style="font-size: 20px; font-weight: 600;">Gmail Integration</div>
-                        <div class="difficulty difficulty-easy" style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-left: auto; background: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid rgba(76, 175, 80, 0.3);">Easy</div>
+            <div class="integration-item">
+                <div class="integration-header">
+                    <div class="integration-icon">📧</div>
+                    <div class="integration-name">Gmail Integration</div>
+                    <div class="difficulty-badge difficulty-easy">Easy</div>
+                </div>
+                <div class="integration-desc">
+                    Automate email management, smart categorization, and response generation using Gmail's robust API.
+                </div>
+                <div class="integration-steps">
+                    <div class="steps-title">Quick Setup:</div>
+                    <div class="steps-list">
+                        1. Go to Google Cloud Console → Create project<br>
+                        2. Enable Gmail API from API Library<br>
+                        3. Create OAuth 2.0 credentials<br>
+                        4. Configure redirect URIs<br>
+                        5. Implement OAuth flow
                     </div>
-                    
-                    <div class="requirements" style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                        <div class="requirements-title" style="font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                            <span>📋</span>
-                            <span>Requirements</span>
-                        </div>
-                        <ul class="requirements-list" style="list-style: none; padding-left: 0;">
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Google Workspace or Gmail account</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Admin access to enable APIs</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">OAuth 2.0 credentials</li>
-                        </ul>
-                    </div>
-
-                    <p class="integration-description" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.5;">
-                        Automate email management, smart categorization, and response generation using Gmail's robust API.
-                    </p>
-
-                    <ol class="setup-steps" style="list-style: none; counter-reset: step-counter;">
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Go to Google Cloud Console and create a new project</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Enable the Gmail API from the API Library</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Create OAuth 2.0 credentials (Client ID and Secret)</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Configure authorized redirect URIs</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Implement OAuth flow in your application</li>
-                    </ol>
-
-                    <div class="code-snippet" style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 14px; overflow-x: auto; border-left: 3px solid #4CAF50;">
-curl -X GET \
-'https://gmail.googleapis.com/gmail/v1/users/me/messages' \
+                </div>
+                <div class="code-example">
+curl -X GET 'https://gmail.googleapis.com/gmail/v1/users/me/messages' \
 -H 'Authorization: Bearer YOUR_ACCESS_TOKEN'
-                    </div>
-
-                    <div class="warning-box" style="background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; display: flex; align-items: flex-start; gap: 10px;">
-                        <div class="warning-icon" style="color: #FF9800; font-size: 18px; margin-top: 2px;">⚠️</div>
-                        <div>
-                            <strong>Security Note:</strong> Store access tokens securely and implement proper token refresh mechanisms. Never expose client secrets in frontend code.
-                        </div>
-                    </div>
-
-                    <button class="button" style="background: rgba(255, 255, 255, 0.2); border: none; border-radius: 8px; padding: 10px 20px; color: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; margin-top: 15px;" onclick="showDetails('gmail')">View Full Documentation</button>
                 </div>
+                <button class="integration-button" onclick="showIntegrationDetails('gmail')">View Documentation</button>
+            </div>
 
-                <!-- Calendar Integration -->
-                <div class="integration-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
-                    <div class="integration-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <div class="integration-icon" style="font-size: 32px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;">📅</div>
-                        <div class="integration-title" style="font-size: 20px; font-weight: 600;">Google Calendar</div>
-                        <div class="difficulty difficulty-easy" style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-left: auto; background: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 1px solid rgba(76, 175, 80, 0.3);">Easy</div>
-                    </div>
-                    
-                    <div class="requirements" style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                        <div class="requirements-title" style="font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                            <span>📋</span>
-                            <span>Requirements</span>
-                        </div>
-                        <ul class="requirements-list" style="list-style: none; padding-left: 0;">
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Google account with Calendar access</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Calendar API enabled</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Service account or OAuth setup</li>
-                        </ul>
-                    </div>
-
-                    <p class="integration-description" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.5;">
-                        Smart scheduling, availability checking, and automated meeting coordination with conflict detection.
-                    </p>
-
-                    <ol class="setup-steps" style="list-style: none; counter-reset: step-counter;">
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Enable Google Calendar API in Cloud Console</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Create service account credentials</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Download JSON key file</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Share calendar with service account email</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Implement calendar read/write operations</li>
-                    </ol>
-
-                    <div class="api-endpoint" style="background: rgba(255, 255, 255, 0.05); border-radius: 6px; padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 13px; margin: 8px 0; border-left: 2px solid #667eea;">
-                        POST https://www.googleapis.com/calendar/v3/calendars/primary/events
-                    </div>
-
-                    <button class="button" style="background: rgba(255, 255, 255, 0.2); border: none; border-radius: 8px; padding: 10px 20px; color: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; margin-top: 15px;" onclick="showDetails('calendar')">Setup Instructions</button>
+            <div class="integration-item">
+                <div class="integration-header">
+                    <div class="integration-icon">📅</div>
+                    <div class="integration-name">Google Calendar</div>
+                    <div class="difficulty-badge difficulty-easy">Easy</div>
                 </div>
-
-                <!-- Slack Integration -->
-                <div class="integration-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
-                    <div class="integration-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <div class="integration-icon" style="font-size: 32px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;">💬</div>
-                        <div class="integration-title" style="font-size: 20px; font-weight: 600;">Slack Integration</div>
-                        <div class="difficulty difficulty-medium" style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-left: auto; background: rgba(255, 152, 0, 0.2); color: #FF9800; border: 1px solid rgba(255, 152, 0, 0.3);">Medium</div>
+                <div class="integration-desc">
+                    Smart scheduling, availability checking, and automated meeting coordination with conflict detection.
+                </div>
+                <div class="integration-steps">
+                    <div class="steps-title">Quick Setup:</div>
+                    <div class="steps-list">
+                        1. Enable Calendar API in Cloud Console<br>
+                        2. Create service account credentials<br>
+                        3. Download JSON key file<br>
+                        4. Share calendar with service account<br>
+                        5. Implement calendar operations
                     </div>
-                    
-                    <div class="requirements" style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                        <div class="requirements-title" style="font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                            <span>📋</span>
-                            <span>Requirements</span>
-                        </div>
-                        <ul class="requirements-list" style="list-style: none; padding-left: 0;">
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Slack workspace admin access</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">App creation permissions</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Webhook endpoint setup</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">SSL certificate for webhooks</li>
-                        </ul>
+                </div>
+                <div class="code-example">
+POST https://www.googleapis.com/calendar/v3/calendars/primary/events
+                </div>
+                <button class="integration-button" onclick="showIntegrationDetails('calendar')">Setup Guide</button>
+            </div>
+
+            <div class="integration-item">
+                <div class="integration-header">
+                    <div class="integration-icon">💬</div>
+                    <div class="integration-name">Slack Integration</div>
+                    <div class="difficulty-badge difficulty-medium">Medium</div>
+                </div>
+                <div class="integration-desc">
+                    Real-time team communication, automated notifications, and intelligent message processing.
+                </div>
+                <div class="integration-steps">
+                    <div class="steps-title">Quick Setup:</div>
+                    <div class="steps-list">
+                        1. Create Slack app in workspace<br>
+                        2. Configure OAuth scopes<br>
+                        3. Set up event subscriptions<br>
+                        4. Install app and get tokens<br>
+                        5. Implement webhook handlers
                     </div>
-
-                    <p class="integration-description" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.5;">
-                        Real-time team communication, automated notifications, and intelligent message processing.
-                    </p>
-
-                    <ol class="setup-steps" style="list-style: none; counter-reset: step-counter;">
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Create a new Slack app in your workspace</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Configure OAuth scopes (channels:read, chat:write, etc.)</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Set up event subscriptions for real-time updates</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Install app to workspace and get tokens</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Implement webhook handlers for events</li>
-                    </ol>
-
-                    <div class="code-snippet" style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 14px; overflow-x: auto; border-left: 3px solid #4CAF50;">
+                </div>
+                <div class="code-example">
 {
   "token": "xoxb-your-bot-token",
   "channel": "#general",
-  "text": "AI Assistant notification",
-  "attachments": [...]
+  "text": "AI Assistant notification"
 }
-                    </div>
-
-                    <button class="button" style="background: rgba(255, 255, 255, 0.2); border: none; border-radius: 8px; padding: 10px 20px; color: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; margin-top: 15px;" onclick="showDetails('slack')">Integration Guide</button>
                 </div>
+                <button class="integration-button" onclick="showIntegrationDetails('slack')">Integration Guide</button>
+            </div>
 
-                <!-- CRM Integration -->
-                <div class="integration-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
-                    <div class="integration-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <div class="integration-icon" style="font-size: 32px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;">💼</div>
-                        <div class="integration-title" style="font-size: 20px; font-weight: 600;">CRM Systems</div>
-                        <div class="difficulty difficulty-medium" style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-left: auto; background: rgba(255, 152, 0, 0.2); color: #FF9800; border: 1px solid rgba(255, 152, 0, 0.3);">Medium</div>
-                    </div>
-                    
-                    <div class="requirements" style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                        <div class="requirements-title" style="font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                            <span>📋</span>
-                            <span>Requirements</span>
-                        </div>
-                        <ul class="requirements-list" style="list-style: none; padding-left: 0;">
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">CRM admin access (Salesforce, HubSpot, etc.)</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">API credentials or connected app</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Custom field access permissions</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Rate limiting considerations</li>
-                        </ul>
-                    </div>
-
-                    <p class="integration-description" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.5;">
-                        Automated lead scoring, contact management, and sales pipeline updates with intelligent data sync.
-                    </p>
-
-                    <ol class="setup-steps" style="list-style: none; counter-reset: step-counter;">
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Create connected app in your CRM platform</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Configure API permissions and scopes</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Implement OAuth 2.0 authentication flow</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Map CRM fields to AI assistant data model</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Set up webhook listeners for real-time updates</li>
-                    </ol>
-
-                    <div class="api-endpoint" style="background: rgba(255, 255, 255, 0.05); border-radius: 6px; padding: 8px 12px; font-family: 'Courier New', monospace; font-size: 13px; margin: 8px 0; border-left: 2px solid #667eea;">
-                        GET /services/data/v52.0/sobjects/Contact/
-                    </div>
-
-                    <button class="button" style="background: rgba(255, 255, 255, 0.2); border: none; border-radius: 8px; padding: 10px 20px; color: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; margin-top: 15px;" onclick="showDetails('crm')">CRM Setup Guide</button>
+            <div class="integration-item">
+                <div class="integration-header">
+                    <div class="integration-icon">💼</div>
+                    <div class="integration-name">CRM Systems</div>
+                    <div class="difficulty-badge difficulty-medium">Medium</div>
                 </div>
-
-                <!-- Microsoft 365 Integration -->
-                <div class="integration-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
-                    <div class="integration-header" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <div class="integration-icon" style="font-size: 32px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center;">📊</div>
-                        <div class="integration-title" style="font-size: 20px; font-weight: 600;">Microsoft 365</div>
-                        <div class="difficulty difficulty-hard" style="padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; margin-left: auto; background: rgba(244, 67, 54, 0.2); color: #FF5722; border: 1px solid rgba(244, 67, 54, 0.3);">Hard</div>
+                <div class="integration-desc">
+                    Automated lead scoring, contact management, and sales pipeline updates with intelligent data sync.
+                </div>
+                <div class="integration-steps">
+                    <div class="steps-title">Quick Setup:</div>
+                    <div class="steps-list">
+                        1. Create connected app in CRM<br>
+                        2. Configure API permissions<br>
+                        3. Implement OAuth 2.0 flow<br>
+                        4. Map CRM fields to data model<br>
+                        5. Set up webhook listeners
                     </div>
-                    
-                    <div class="requirements" style="background: rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
-                        <div class="requirements-title" style="font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                            <span>📋</span>
-                            <span>Requirements</span>
-                        </div>
-                        <ul class="requirements-list" style="list-style: none; padding-left: 0;">
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Azure AD tenant admin access</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">App registration in Azure portal</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Microsoft Graph API permissions</li>
-                            <li style="padding: 5px 0; color: rgba(255, 255, 255, 0.8); position: relative; padding-left: 20px;">Multi-tenant app considerations</li>
-                        </ul>
+                </div>
+                <div class="code-example">
+GET /services/data/v52.0/sobjects/Contact/
+                </div>
+                <button class="integration-button" onclick="showIntegrationDetails('crm')">CRM Setup</button>
+            </div>
+
+            <div class="integration-item">
+                <div class="integration-header">
+                    <div class="integration-icon">📊</div>
+                    <div class="integration-name">Microsoft 365</div>
+                    <div class="difficulty-badge difficulty-hard">Hard</div>
+                </div>
+                <div class="integration-desc">
+                    Complete Office 365 integration including Outlook, Teams, SharePoint, and OneDrive automation.
+                </div>
+                <div class="integration-steps">
+                    <div class="steps-title">Quick Setup:</div>
+                    <div class="steps-list">
+                        1. Register app in Azure AD<br>
+                        2. Configure Graph API permissions<br>
+                        3. Implement MSAL authentication<br>
+                        4. Handle token acquisition<br>
+                        5. Integrate M365 services
                     </div>
-
-                    <p class="integration-description" style="color: rgba(255, 255, 255, 0.8); margin-bottom: 20px; line-height: 1.5;">
-                        Complete Office 365 integration including Outlook, Teams, SharePoint, and OneDrive automation.
-                    </p>
-
-                    <ol class="setup-steps" style="list-style: none; counter-reset: step-counter;">
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Register application in Azure Active Directory</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Configure Microsoft Graph API permissions</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Implement Microsoft Authentication Library (MSAL)</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Handle token acquisition and refresh</li>
-                        <li style="counter-increment: step-counter; margin-bottom: 15px; padding-left: 30px; position: relative; color: rgba(255, 255, 255, 0.9); line-height: 1.4;">Integrate with specific M365 services</li>
-                    </ol>
-
-                    <div class="code-snippet" style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 14px; overflow-x: auto; border-left: 3px solid #4CAF50;">
+                </div>
+                <div class="code-example">
 const graphClient = Client.init({
-    authProvider: authProvider
+  authProvider: authProvider
 });
-
-const messages = await graphClient
-    .me.messages
-    .get();
-                    </div>
-
-                    <div class="warning-box" style="background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; display: flex; align-items: flex-start; gap: 10px;">
-                        <div class="warning-icon" style="color: #FF9800; font-size: 18px; margin-top: 2px;">⚠️</div>
-                        <div>
-                            <strong>Complex Setup:</strong> M365 integration requires careful attention to security, permissions, and compliance requirements. Consider enterprise-grade authentication flows.
-                        </div>
-                    </div>
-
-                    <button class="button" style="background: rgba(255, 255, 255, 0.2); border: none; border-radius: 8px; padding: 10px 20px; color: white; font-weight: 500; cursor: pointer; transition: all 0.3s ease; margin-top: 15px;" onclick="showDetails('microsoft')">Advanced Setup</button>
+const messages = await graphClient.me.messages.get();
                 </div>
+                <button class="integration-button" onclick="showIntegrationDetails('microsoft')">Advanced Setup</button>
+            </div>
 
-                <!-- Zapier Integration -->
-                <div class="integration-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
-                    <div class="integration-header" style="display: flex; align-items: center; gap: 15px
+            <div class="integration-item">
+                <div class="integration-header">
+                    <div class="integration-icon">⚡</div>
+                    <div class="integration-name">Zapier Webhooks</div>
+                    <div class="difficulty-badge difficulty-easy">Easy</div>
+                </div>
+                <div class="integration-desc">
+                    Connect 3,000+ apps through Zapier's webhook system for maximum integration flexibility.
+                </div>
+                <div class="integration-steps">
+                    <div class="steps-title">Quick Setup:</div>
+                    <div class="steps-list">
+                        1. Create webhook trigger in Zapier<br>
+                        2. Configure AI assistant endpoint<br>
+                        3. Set up data transformation<br>
+                        4. Connect target applications<br>
+                        5. Test webhook delivery
+                    </div>
+                </div>
+                <div class="code-example">
+POST https://hooks.zapier.com/hooks/catch/123456/abcdef/
+Content-Type: application/json
+
+{"event": "task_completed", "data": {...}}
+                </div>
+                <button class="integration-button" onclick="showIntegrationDetails('zapier')">Quick Start</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global tab switching function
+        window.switchTab = function(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all nav tabs
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            const selectedTab = document.getElementById(tabName);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Add active class to clicked nav tab
+            const clickedTab = event?.target || document.querySelector(`[onclick*="${tabName}"]`);
+            if (clickedTab) {
+                clickedTab.classList.add('active');
+            }
+        };
+
+        // Enhanced task functionality
+        function toggleTask(taskElement) {
+            const checkbox = taskElement.querySelector('.task-checkbox');
+            const text = taskElement.querySelector('.task-text');
+            
+            checkbox.classList.toggle('completed');
+            text.classList.toggle('completed');
+            
+            // Add completion animation
+            if (checkbox.classList.contains('completed')) {
+                taskElement.style.animation = 'slideIn 0.3s ease-out';
+            }
+        }
+
+        // Dashboard stat interactions
+        function showStatDetail(statType) {
+            const details = {
+                tasks: "AI has automated 247 tasks this month, including email responses, calendar scheduling, and report generation.",
+                hours: "Your team has saved 32.5 hours this week through AI automation, equivalent to nearly a full work day.",
+                savings: "Monthly savings of $4,890 comes from reduced administrative overhead and increased productivity.",
+                integrations: "12 business tools are actively connected, including email, calendar, CRM, and project management systems."
+            };
+            
+            alert(details[statType] || "Statistical information about your AI assistant performance.");
+        }
+
+        // Enhanced chat functionality with typing indicator
+        function handleChatInput(event) {
+            if (event.key === 'Enter') {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                if (message) {
+                    addMessage(message, 'user');
+                    input.value = '';
+                    
+                    // Show typing indicator
+                    showTypingIndicator();
+                    
+                    // Simulate AI response with delay
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        const response = generateAIResponse(message);
+                        addMessage(response, 'bot');
+                    }, 1500);
+                }
+            }
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'flex';
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            indicator.style.display = 'none';
+        }
+
+        function addMessage(content, type) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = content;
+            
+            messageDiv.appendChild(messageContent);
+            messagesContainer.appendChild(messageDiv);
+            
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function generateAIResponse(userMessage) {
+            const responses = {
+                'schedule': "I'd be happy to help you schedule a meeting! Please provide me with the meeting details: participants, preferred time, and duration. I'll check everyone's availability and send calendar invites automatically.",
+                'calendar': "Let me check your calendar... You have 3 meetings today: 9 AM team standup, 2 PM client presentation, and 4 PM project review. Your next free slot is at 11 AM for 1 hour.",
+                'email': "I can help you draft professional emails. What type of email would you like to create? A follow-up, proposal, meeting invitation, or something else? Please provide the key points you'd like to include.",
+                'task': "I'll create a new task for you. Please specify: 1) Task description, 2) Priority level (High/Medium/Low), 3) Due date, and 4) Any relevant context. I'll add it to your task management system.",
+                'report': "I can generate various reports for you. What type of report do you need? Weekly summary, financial analysis, team performance, or custom metrics? I'll compile the data automatically from your connected systems.",
+                'default': "I understand you'd like assistance with that. As your AI Personal Assistant, I can help with scheduling, email management, task creation, report generation, and much more. Could you be more specific about what you need?"
+            };
+            
+            const lowerMessage = userMessage.toLowerCase();
+            
+            if (lowerMessage.includes('schedule') || lowerMessage.includes('meeting')) {
+                return responses.schedule;
+            } else if (lowerMessage.includes('calendar') || lowerMessage.includes('appointment')) {
+                return responses.calendar;
+            } else if (lowerMessage.includes('email') || lowerMessage.includes('message')) {
+                return responses.email;
+            } else if (lowerMessage.includes('task') || lowerMessage.includes('todo')) {
+                return responses.task;
+            } else if (lowerMessage.includes('report') || lowerMessage.includes('analysis')) {
+                return responses.report;
+            } else {
+                return responses.default;
+            }
+        }
+
+        function quickAction(action) {
+            addMessage(action, 'user');
+            showTypingIndicator();
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = generateAIResponse(action);
+                addMessage(response, 'bot');
+            }, 1500);
+        }
+
+        // Enhanced analytics calculator functionality
+        function calculateCosts() {
+            // Get input values
+            const salary = parseFloat(document.getElementById('salary').value) || 0;
+            const health = parseFloat(document.getElementById('health').value) || 0;
+            const payrollTaxRate = parseFloat(document.getElementById('payrollTax').value) || 0;
+            const workersComp = parseFloat(document.getElementById('workersComp').value) || 0;
+            const officeSpaceMonthly = parseFloat(document.getElementById('officeSpace').value) || 0;
+            const training = parseFloat(document.getElementById('training').value) || 0;
+            const ptoWeeks = parseFloat(document.getElementById('pto').value) || 0;
+            const managementHours = parseFloat(document.getElementById('management').value) || 0;
+            const managerRate = parseFloat(document.getElementById('managerRate').value) || 0;
+            const recruitment = parseFloat(document.getElementById('recruitment').value) || 0;
+
+            // Calculate derived costs
+            const payrollTaxes = salary * (payrollTaxRate / 100);
+            const officeSpaceAnnual = officeSpaceMonthly * 12;
+            const ptoValue = (salary / 48) * ptoWeeks; // 48 working weeks in a year
+            const managementCost = managementHours * 52 * managerRate; // 52 weeks
+
+            // Total human cost
+            const totalHumanCost = salary + health + payrollTaxes + workersComp + 
+                                 officeSpaceAnnual + training + ptoValue + managementCost + recruitment;
+
+            // AI cost (fixed)
+            const aiCostAnnual = 299 * 12;
+
+            // Savings calculation
+            const totalSavings = totalHumanCost - aiCostAnnual;
+            const savingsPercentage = ((totalSavings / totalHumanCost) * 100);
+
+            // Update display with animation
+            animateValue('humanCost', totalHumanCost);
+            animateValue('aiCost', aiCostAnnual);
+            animateValue('savings', totalSavings);
+            document.getElementById('savingsPercent').textContent = `${savingsPercentage.toFixed(1)}% cost reduction`;
+
+            // Update breakdown
+            updateBreakdown({
+                'Base Salary': salary,
+                'Health Insurance': health,
+                'Payroll Taxes': payrollTaxes,
+                'Workers\' Comp': workersComp,
+                'Office Space': officeSpaceAnnual,
+                'Training Costs': training,
+                'Paid Time Off': ptoValue,
+                'Management Time': managementCost,
+                'Recruitment': recruitment
+            });
+        }
+
+        function animateValue(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function updateValue(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentValue = startValue + (targetValue - startValue) * progress;
+                
+                element.textContent = `${Math.floor(currentValue).toLocaleString()}`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateValue);
+                }
+            }
+            
+            requestAnimationFrame(updateValue);
+        }
+
+        function updateBreakdown(costs) {
+            const breakdownGrid = document.getElementById('breakdownGrid');
+            breakdownGrid.innerHTML = '';
+
+            Object.entries(costs).forEach(([label, value]) => {
+                if (value > 0) {
+                    const item = document.createElement('div');
+                    item.className = 'breakdown-item';
+                    item.innerHTML = `
+                        <div class="breakdown-label">${label}</div>
+                        <div class="breakdown-value">${value.toLocaleString()}</div>
+                    `;
+                    breakdownGrid.appendChild(item);
+                }
+            });
+        }
+
+        // Developer Setup functions
+        function showIntegrationDetails(integration) {
+            const details = {
+                gmail: "For complete Gmail integration setup, you'll need to configure OAuth 2.0, handle token refresh, and implement proper error handling for API rate limits. Visit the Google Cloud Console to get started with API credentials.",
+                calendar: "Calendar integration requires careful handling of timezone conversions, recurring events, and attendee management for complex scheduling scenarios. Consider implementing conflict detection and automatic rescheduling.",
+                slack: "Slack integration involves setting up proper event subscriptions, managing workspace permissions, and handling real-time message processing. Test thoroughly with webhook verification.",
+                crm: "CRM integration complexity varies by platform. Salesforce requires Apex triggers, while HubSpot uses simpler webhook configurations. Plan for data mapping and field synchronization.",
+                microsoft: "Microsoft 365 integration is the most complex, requiring Azure AD app registration, proper Graph API scoping, and enterprise security compliance. Consider hiring a Microsoft partner for enterprise deployments.",
+                zapier: "Zapier provides the easiest integration path but may have limitations in real-time processing and complex data transformations. Great for getting started quickly with basic automations."
+            };
+
+            alert(details[integration] || "Integration details coming soon...");
+        }
+
+        // Initialize calculations and animations on page load
+        window.addEventListener('load', function() {
+            calculateCosts();
+            
+            // Animate dashboard stats on load
+            setTimeout(() => {
+                const statCards = document.querySelectorAll('.stat-card');
+                statCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    }, index * 100);
+                });
+            }, 500);
+        });
+    </script>
+</body>
+</html>
